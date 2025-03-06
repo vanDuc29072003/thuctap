@@ -94,7 +94,7 @@
                 </a>
               </li>
               <li class="nav-item ">
-                <a href="may.html" class="collapsed" aria-expanded="false">
+                <a href="may.php" class="collapsed" aria-expanded="false">
                   <i class="fa-solid fa-sliders"></i>
                   <p>Danh sách máy</p>
                 </a>

@@ -1,3 +1,17 @@
+<?php
+
+  include 'connect.php';
+  if(empty($_POST['submit'])){
+     $sql = "SELECT * FROM may";
+  $stmt = $conn->prepare($sql);
+  $query = $stmt->execute();
+  $result= array();
+  while ($row=$stmt->fetch(PDO::FETCH_ASSOC)){
+    $result[] = $row;
+     }
+  }
+?>
+
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -199,75 +213,38 @@
                 <table class="table table-bordered">
                   <thead style="background-color: pink; color: black;">
                     <tr>
-                      <th>#</th>
-                      <th>Table heading</th>
-                      <th>Table heading</th>
-                      <th>Table heading</th>
-                      <th>Table heading</th>
-                      <th>Table heading</th>
-                      <th>Cập nhật</th>
+
+                      <th>STT</th>
+                      <th>Tên máy</th>
+                      <th>Seri máy</th>
+                      <th>Chu kì bảo trì</th>
+                      <th>Năm sản xuất</th>
+                      <th>Hãng sản xuất</th>
+                      <th>Thao tác</th>
                     </tr>
                   </thead>
                   <tbody>
-                    <tr>
-                      <th scope="row">1</th>
-                      <td>Table cell</td>
-                      <td>Table cell</td>
-                      <td>Table cell</td>
-                      <td>Table cell</td>
-                      <td>Table cell</td>
-                      <td>
+                      <?php foreach ($result as $items):?>
+                      <tr>
+                         <td><?php echo $items['MaMay'] ?></td> 
+                         <td><?php echo $items['TenMay'] ?></td> 
+                          <td><?php echo $items['SeriMay'] ?></td>  
+                           <td><?php echo $items['ChuKyBaoTri'] ?></td> 
+                            <td><?php echo $items['NamSanXuat'] ?></td> 
+                             <td><?php echo $items['HangSanXuat'] ?></td> 
+                             <td>
                         
-                          <div class="d-flex gap-2">
-                            <button class="btn btn-warning btn-sm">
-                                <i class="fa fa-edit"></i> Sửa
-                              </button>
-                            <button class="btn btn-danger btn-sm">
-                              <i class="fa fa-trash"></i> Xóa
+                        <div class="d-flex gap-2">
+                          <button class="btn btn-warning btn-sm">
+                              <i class="fa fa-edit"></i> Sửa
                             </button>
-                          </div>
-                        
-                      </td>
-                    </tr>
-                    <tr>
-                      <th scope="row">2</th>
-                      <td>Table cell</td>
-                      <td>Table cell</td>
-                      <td>Table cell</td>
-                      <td>Table cell</td>
-                      <td>Table cell</td>                   
-                      <td>
-                        
-                          <div class="d-flex gap-2">
-                            <button class="btn btn-warning btn-sm">
-                                <i class="fa fa-edit"></i> Sửa
-                              </button>
-                            <button class="btn btn-danger btn-sm">
-                              <i class="fa fa-trash"></i> Xóa
-                            </button>
-                          </div>
-                        
-                      </td>
-                    </tr>
-                    <tr>
-                      <th scope="row">3</th>
-                      <td>Table cell</td>
-                      <td>Table cell</td>
-                      <td>Table cell</td>
-                      <td>Table cell</td>
-                      <td>Table cell</td>
-                      <td>
-                        
-                          <div class="d-flex gap-2">
-                            <button class="btn btn-warning btn-sm">
-                                <i class="fa fa-edit"></i> Sửa
-                              </button>
-                            <button class="btn btn-danger btn-sm">
-                              <i class="fa fa-trash"></i> Xóa
-                            </button>
-                          </div>
-                                               
-                      </td>
+                          <button class="btn btn-danger btn-sm">
+                            <i class="fa fa-trash"></i> Xóa
+                          </button>
+                        </div>
+                    </td>
+                      </tr>
+                    <?php endforeach ?>       
                     </tr>
                   </tbody>
                 </table>
