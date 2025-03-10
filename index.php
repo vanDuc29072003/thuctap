@@ -43,7 +43,7 @@
         <div class="sidebar-logo">
           <!-- Logo Header -->
           <div class="logo-header" data-background-color="dark">
-            <a href="index.html" class="logo">
+            <a href="index.php" class="logo">
               <img src="assets/img/logo.png" alt="navbar brand" class="navbar-brand" height="50" />
             </a>
             <div class="nav-toggle">
@@ -64,7 +64,7 @@
           <div class="sidebar-content">
             <ul class="nav nav-secondary">
               <li class="nav-item ">
-                <a href="index.html" class="collapsed" aria-expanded="false">
+                <a href="index.php" class="collapsed" aria-expanded="false">
                   <i class="fas fa-home"></i>
                   <p>Dashboard</p>
                 </a>
