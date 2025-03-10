@@ -1,8 +1,16 @@
+<?php
+  session_start();
+  if (!isset($_SESSION['TenNhanVien'])) {
+      header('Location: login.php');
+  }
+?>
+
 <!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta charset="UTF-8"/>
     <title>CTY TNHH IN T.KHOA</title>
     <meta content="width=device-width, initial-scale=1.0, shrink-to-fit=no" name="viewport" />
     <link rel="icon" href="assets/img/logo.png" type="image/x-icon" />
@@ -35,7 +43,7 @@
         <div class="sidebar-logo">
           <!-- Logo Header -->
           <div class="logo-header" data-background-color="dark">
-            <a href="index.html" class="logo">
+            <a href="index.php" class="logo">
               <img src="assets/img/logo.png" alt="navbar brand" class="navbar-brand" height="50" />
             </a>
             <div class="nav-toggle">
@@ -56,7 +64,7 @@
           <div class="sidebar-content">
             <ul class="nav nav-secondary">
               <li class="nav-item ">
-                <a href="index.html" class="collapsed" aria-expanded="false">
+                <a href="index.php" class="collapsed" aria-expanded="false">
                   <i class="fas fa-home"></i>
                   <p>Dashboard</p>
                 </a>
@@ -150,7 +158,7 @@
                 </div>
               </li>
               <li class="nav-item ">
-                <a href="login.html" class="collapsed" aria-expanded="false">
+                <a href="logout.php" id="btn-logout"class="collapsed" aria-expanded="false">
                   <i class="fa-solid fa-right-from-bracket"></i>
                   <p>Đăng xuất</p>
                 </a>
@@ -179,7 +187,7 @@
                   </a>
                 </li>
                 <li class="nav-item topbar-icon">
-                  <b class="ms-2">Xin chào, ABC</b>
+                  <b class="ms-2">Xin chào, <?php echo $_SESSION['TenNhanVien']?></b>
                 </li>  
               </ul>
             </div>
@@ -231,5 +239,15 @@
 
     <!-- Kaiadmin JS -->
     <script src="assets/js/kaiadmin.min.js"></script>
+
+    <script>
+      document.getElementById('btn-logout').addEventListener('click', function(event) {
+          event.preventDefault();
+          var logout = confirm("Bạn có chắc chắn muốn đăng xuất?");
+          if (logout) {
+              window.location.href = 'logout.php';
+          }
+      });
+    </script>
   </body>
 </html>
