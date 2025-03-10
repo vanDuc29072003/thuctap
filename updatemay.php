@@ -272,13 +272,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update'])) {
                 <div class="form-group">
                     <label for="TenMay">Tên Máy</label>
                     <input type="text" class="form-control" id="TenMay" name="TenMay" 
-                           value="<?php echo htmlspecialchars($may['TenMay']); ?>" required>
+                           value="<?php echo htmlspecialchars($may['TenMay']); ?>" readonly>
                 </div>
                 
                 <div class="form-group">
                     <label for="SeriMay">Seri Máy</label>
                     <input type="text" class="form-control" id="SeriMay" name="SeriMay"
-                           value="<?php echo htmlspecialchars($may['SeriMay']); ?>" required>
+                           value="<?php echo htmlspecialchars($may['SeriMay']); ?>" readonly>
                 </div>
                 
                 <div class="form-group">
@@ -296,13 +296,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update'])) {
                 <div class="form-group">
                     <label for="NamSanXuat">Năm Sản Xuất</label>
                     <input type="number" class="form-control" id="NamSanXuat" name="NamSanXuat" 
-                           value="<?php echo htmlspecialchars($may['NamSanXuat']); ?>" required>
+                           value="<?php echo htmlspecialchars($may['NamSanXuat']); ?>" readonly>
                 </div>
                 
                 <div class="form-group">
                     <label for="HangSanXuat">Hãng Sản Xuất</label>
                     <input type="text" class="form-control" id="HangSanXuat" name="HangSanXuat"
-                           value="<?php echo htmlspecialchars($may['HangSanXuat']); ?>" required>
+                           value="<?php echo htmlspecialchars($may['HangSanXuat']); ?>" readonly>
                 </div>
             </div>
 
