@@ -1,7 +1,46 @@
+<?php
+session_start();
+include 'connect.php';
+
+$error = "";   // Biến lưu thông báo lỗi đăng nhập
+$error2 = "";  // Biến lưu thông báo chưa nhập tài khoản
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    if (empty($_POST['MaNhanVien']) || empty($_POST['MatKhau'])) {
+        $error2 = "Chưa nhập thông tin tài khoản";
+    } else {
+        $MaNhanVien = $_POST['MaNhanVien'];
+        $MatKhau = $_POST['MatKhau'];
+
+        $sql = "SELECT * FROM taikhoan WHERE MaNhanVien = :MaNhanVien AND MatKhau = :MatKhau";
+        $stmt = $conn->prepare($sql);
+        $stmt->bindParam(':MaNhanVien', $MaNhanVien);
+        $stmt->bindParam(':MatKhau', $MatKhau);
+        $stmt->execute();
+        $user = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if ($user) {
+            $sql = "SELECT TenNhanVien FROM nhanvien WHERE MaNhanVien = :MaNhanVien";
+            $stmt = $conn->prepare($sql);
+            $stmt->bindParam(':MaNhanVien', $MaNhanVien);
+            $stmt->execute();
+            $TenNhanVien = $stmt->fetch(PDO::FETCH_ASSOC);
+        
+            $_SESSION['TenNhanVien'] = $TenNhanVien['TenNhanVien'];
+            header('Location: index.php');
+            exit;
+        } else {
+            $error = "Sai Mã nhân viên hoặc Mật khẩu";
+        }
+    }
+}
+?>
+
+
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
+<meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 <meta charset="UTF-8"/>
     <title>Đăng nhập</title>
@@ -47,22 +86,35 @@
                                 <h1 class="card-title">Đăng Nhập</h1>
                             </div>
                             <div class="card-body">
-                                <form>
+                                <form method="POST">
                                     <div class="form-group text-start">
                                         <label>Mã nhân viên</label>
-                                        <input type="text" class="form-control" id="manhanvien"
+                                        <input type="text" class="form-control" id="manhanvien" name="MaNhanVien"
                                             placeholder="Nhập mã nhân viên">
                                     </div>
                                     <div class="form-group text-start">
                                         <label>Mật khẩu</label>
-                                        <input type="password" class="form-control" id="matkhau" placeholder="Mật khẩu">
+                                        <input type="password" class="form-control" name="MatKhau" id="matkhau" placeholder="Mật khẩu">
                                     </div>
                                     <div class="form-check text-start">
                                         <input type="checkbox" class="form-check-input" id="exampleCheck1">
                                         <label class="form-check-label" for="exampleCheck1">Nhớ mật khẩu?</label>
                                     </div>
-                                   
-                                        <button type="submit" class="btn btn-primary">Đăng nhập</button>
+                                  
+                                    <?php if (!empty($error2)) : ?>
+                                        <div class="alert alert-danger" role="alert">
+                                                <?php echo $error2; ?>
+                                            </div>
+                                        <?php endif; ?>
+
+                                        <?php if (!empty($error)) : ?>
+                                            <div class="alert alert-danger" role="alert">
+                                                <?php echo $error; ?>
+                                            </div>
+                                        <?php endif; ?>
+
+                                    <button type="submit" name="submit" class="btn btn-primary">Đăng nhập</button>
+
                                     
                                    
                                 </form>
