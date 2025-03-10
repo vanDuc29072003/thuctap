@@ -105,7 +105,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                         <div class="alert alert-danger" role="alert">
                                                 <?php echo $error2; ?>
                                             </div>
-                                        <?php endif; ?>
+                                    <?php endif; ?>
 
                                         <?php if (!empty($error)) : ?>
                                             <div class="alert alert-danger" role="alert">
