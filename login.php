@@ -20,7 +20,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
         if ($user) {
-            $_SESSION['MaNhanVien'] = $MaNhanVien;
+            $sql = "SELECT TenNhanVien FROM nhanvien WHERE MaNhanVien = :MaNhanVien";
+            $stmt = $conn->prepare($sql);
+            $stmt->bindParam(':MaNhanVien', $MaNhanVien);
+            $stmt->execute();
+            $TenNhanVien = $stmt->fetch(PDO::FETCH_ASSOC);
+        
+            $_SESSION['TenNhanVien'] = $TenNhanVien['TenNhanVien'];
             header('Location: index.php');
             exit;
         } else {
@@ -36,6 +42,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <head>
 <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta charset="UTF-8"/>
     <title>Đăng nhập</title>
     <meta content="width=device-width, initial-scale=1.0, shrink-to-fit=no" name="viewport" />
     <link rel="icon" href="assets/img/logo.png" type="image/x-icon" />
