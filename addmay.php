@@ -1,15 +1,33 @@
 <?php
+include 'connect.php';
 
-  include 'connect.php';
-  if(empty($_POST['submit'])){
-     $sql = "SELECT * FROM may";
-  $stmt = $conn->prepare($sql);
-  $query = $stmt->execute();
-  $result= array();
-  while ($row=$stmt->fetch(PDO::FETCH_ASSOC)){
-    $result[] = $row;
-     }
-  }
+if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['submit'])) {
+    if (isset($_POST['TenMay'], $_POST['SeriMay'], $_POST['ChuKyBaoTri'], $_POST['NamSanXuat'], $_POST['HangSanXuat'])) {
+        $TenMay = $_POST['TenMay'];
+        $SeriMay = $_POST['SeriMay'];
+        $ChuKyBaoTri = $_POST['ChuKyBaoTri'];
+        $NamSanXuat = $_POST['NamSanXuat'];
+        $HangSanXuat = $_POST['HangSanXuat'];
+
+        // Chuẩn bị truy vấn SQL
+        $sql = "INSERT INTO may (TenMay, SeriMay, ChuKyBaoTri, NamSanXuat, HangSanXuat) 
+                VALUES (:TenMay, :SeriMay, :ChuKyBaoTri, :NamSanXuat, :HangSanXuat)";
+        
+        $stmt = $conn->prepare($sql);
+        $stmt->bindParam(':TenMay', $TenMay);
+        $stmt->bindParam(':SeriMay', $SeriMay);
+        $stmt->bindParam(':ChuKyBaoTri', $ChuKyBaoTri, PDO::PARAM_INT);
+        $stmt->bindParam(':NamSanXuat', $NamSanXuat, PDO::PARAM_INT);
+        $stmt->bindParam(':HangSanXuat', $HangSanXuat);
+        try{
+            if ($stmt->execute()) {
+                $error1 = "Thêm máy mới thành công" ;
+            }
+        } catch (Exception $e) {
+            $error = "Thêm mới không thành công. Do trùng seri máy" ;
+        }
+    } 
+}
 ?>
 
 <!DOCTYPE html>
@@ -201,63 +219,80 @@
           </nav>
         </div>
         <div class="container">
-          <div class="page-inner">
-            <div class="table-responsive">
-            <table class="table table-bordered">
-              <div class="d-flex justify-content-between align-items-center mb-3">
-                <h1 class="mb-0">Danh sách máy</h1>
-                <a href="addmay.php" style="color: white;">
-                  <button class="btn btn-primary">
-                    <i class="fa fa-plus"></i> Thêm mới
-                  </button>
-              </div>              
-              <div class="table-responsive">
-                <table class="table table-bordered">
-                  <thead style="background-color: pink; color: black;">
-                    <tr>
-
-                      <th>STT</th>
-                      <th>Tên máy</th>
-                      <th>Seri máy</th>
-                      <th>Chu kì bảo trì (Tháng)</th>
-                      <th>Năm sản xuất</th>
-                      <th>Hãng sản xuất</th>
-                      <th>Thao tác</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                      <?php foreach ($result as $items):?>
-                      <tr>
-                         <td><?php echo $items['MaMay'] ?></td> 
-                         <td><?php echo $items['TenMay'] ?></td> 
-                          <td><?php echo $items['SeriMay'] ?></td>  
-                          <td><?php echo $items['ChuKyBaoTri'] ?></td> 
-                          <td><?php echo $items['NamSanXuat'] ?></td> 
-                          <td><?php echo $items['HangSanXuat'] ?></td> 
-                          <td>
-                               <div class="d-flex gap-2">
-                                    <button class="btn btn-warning btn-sm">
-                                        <i class="fa fa-edit"></i> Sửa
-                                      </button>
-                                      <button class="btn btn-danger btn-sm" id="delete-<?php echo $items['MaMay']; ?>">
-                                        <i class="fa fa-trash"></i> Xóa
-                                      </button>
-
-                                  </div>
-                          </td>
-                      </tr>
-                    <?php endforeach ?>       
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
+    <div class="page-inner">
+        <div class="card">
+            <div class="card-header">
+            <div class="row">
+                        <!-- Cột 1 -->
+                        <div class="col-md-6">
+                            <h1>Thêm Máy Mới</h1>
+                        </div>
+                        <?php if (!empty($error)) : ?>
+                            <div class="col-md-6">
+                                <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                                    <strong><?php echo $error; ?></strong>
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>
+                        <?php endif; ?>
+                        <?php if (!empty($error1)) : ?>
+                            <div class="col-md-6">
+                                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                                    <strong><?php echo $error1; ?></strong>
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>
+                        <?php endif; ?>
+                </div>
             </div>
-            </table>
-          </div>
-          </div>
+            <div class="card-body">
+                <form method="POST">
+                    <div class="row">
+                        <!-- Cột 1 -->
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="TenMay">Tên Máy</label>
+                                <input type="text" class="form-control" id="TenMay" name="TenMay" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="SeriMay">Seri Máy</label>
+                                <input type="text" class="form-control" id="SeriMay" name="SeriMay" required>
+                            </div>
+                            
+                            <div class="form-group">
+                            <label for="ChuKyBaoTri">Chu Kỳ Bảo Trì</label>
+                                <div class="input-group mb-3">
+                                    <input type="number" class="form-control" id="ChuKyBaoTri" name="ChuKyBaoTri" required>
+                                    <span class="input-group-text" id="basic-addon2">Tháng</span>
+                                 </div>
+                            </div>
+                        </div>
+
+                        <!-- Cột 2 -->
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="NamSanXuat">Năm Sản Xuất</label>
+                                <input type="number" class="form-control" id="NamSanXuat" name="NamSanXuat" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="HangSanXuat">Hãng Sản Xuất</label>
+                                <input type="text" class="form-control" id="HangSanXuat" name="HangSanXuat" required>
+                            </div>
+                        </div>
+                        <div class="form-group mt-4">
+                                <button type="submit" name="submit" class="btn btn-primary">
+                                    <i class="fa fa-save"></i> Tạo Mới
+                                </button>
+                        </div>
+                    </div> <!-- End Row -->
+                </form>
+            </div>
         </div>
-      </div> 
     </div>
+</div>
+
+
+        
     <!--   Core JS Files   -->
     <script src="assets/js/core/jquery-3.7.1.min.js"></script>
     <script src="assets/js/core/popper.min.js"></script>
@@ -295,18 +330,5 @@
 
     <!-- Kaiadmin JS -->
     <script src="assets/js/kaiadmin.min.js"></script>
-    <script>
-      document.addEventListener("DOMContentLoaded", function () {
-          let buttons = document.querySelectorAll("[id^=delete-]");
-          buttons.forEach(button => {
-              button.addEventListener("click", function () {
-                  let id = this.id.split("-")[1]; // Lấy ID từ delete-123
-                  if (confirm("Bạn có chắc chắn muốn xóa máy này?")) {
-                      window.location.href = `deletemay.php?id=${id}`;
-                  }
-              });
-          });
-      });
-    </script>
   </body>
 </html>
