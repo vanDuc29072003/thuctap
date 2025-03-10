@@ -1,15 +1,61 @@
 <?php
+include 'connect.php';
 
-  include 'connect.php';
-  if(empty($_POST['submit'])){
-     $sql = "SELECT * FROM may";
-  $stmt = $conn->prepare($sql);
-  $query = $stmt->execute();
-  $result= array();
-  while ($row=$stmt->fetch(PDO::FETCH_ASSOC)){
-    $result[] = $row;
-     }
-  }
+// 1. Kiểm tra có nhận được MaMay từ URL không
+if (!isset($_GET['MaMay'])) {
+    die("Thiếu tham số MaMay trên URL");
+}
+$MaMay = $_GET['MaMay'];
+
+// 2. Lấy dữ liệu cũ của máy từ bảng `may`
+$sql = "SELECT * FROM may WHERE MaMay = :MaMay LIMIT 1";
+$stmt = $conn->prepare($sql);
+$stmt->execute(['MaMay' => $MaMay]);
+$may = $stmt->fetch(PDO::FETCH_ASSOC);
+
+// Nếu không tìm thấy máy, báo lỗi
+if (!$may) {
+    die("Không tìm thấy máy có Mã = $MaMay");
+}
+if (isset($_GET['success']) && $_GET['success'] == 1) {
+    $error1  = "Cập nhật thông tin máy thành công" ;
+}
+
+// 3. Nếu người dùng nhấn nút cập nhật (method=POST)
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update'])) {
+    // Lấy dữ liệu từ form
+    $TenMay       = $_POST['TenMay'];
+    $SeriMay      = $_POST['SeriMay'];
+    $ChuKyBaoTri  = $_POST['ChuKyBaoTri'];
+    $NamSanXuat   = $_POST['NamSanXuat'];
+    $HangSanXuat  = $_POST['HangSanXuat'];
+
+    // 4. Thực hiện UPDATE
+    $sqlUpdate = "UPDATE may 
+                  SET TenMay = :TenMay, 
+                      SeriMay = :SeriMay, 
+                      ChuKyBaoTri = :ChuKyBaoTri, 
+                      NamSanXuat = :NamSanXuat, 
+                      HangSanXuat = :HangSanXuat
+                  WHERE MaMay = :MaMay";
+    $stmtUpdate = $conn->prepare($sqlUpdate);
+
+    $stmtUpdate->bindParam(':TenMay', $TenMay);
+    $stmtUpdate->bindParam(':SeriMay', $SeriMay);
+    $stmtUpdate->bindParam(':ChuKyBaoTri', $ChuKyBaoTri, PDO::PARAM_INT);
+    $stmtUpdate->bindParam(':NamSanXuat', $NamSanXuat, PDO::PARAM_INT);
+    $stmtUpdate->bindParam(':HangSanXuat', $HangSanXuat);
+    $stmtUpdate->bindParam(':MaMay', $MaMay, PDO::PARAM_INT);
+
+    if ($stmtUpdate->execute()) {
+       
+        header("Location: updatemay.php?MaMay=$MaMay&success=1");
+       
+        exit();
+    } else {
+       
+    }
+}
 ?>
 
 <!DOCTYPE html>
@@ -201,63 +247,80 @@
           </nav>
         </div>
         <div class="container">
-          <div class="page-inner">
-            <div class="table-responsive">
-            <table class="table table-bordered">
-              <div class="d-flex justify-content-between align-items-center mb-3">
-                <h1 class="mb-0">Danh sách máy</h1>
-                <a href="addmay.php" style="color: white;">
-                  <button class="btn btn-primary">
-                    <i class="fa fa-plus"></i> Thêm mới
-                  </button>
-              </div>              
-              <div class="table-responsive">
-                <table class="table table-bordered">
-                  <thead style="background-color: pink; color: black;">
-                    <tr>
-                      <th>Mã máy</th>
-                      <th>Tên máy</th>
-                      <th>Seri máy</th>
-                      <th>Chu kì bảo trì (Tháng)</th>
-                      <th>Năm sản xuất</th>
-                      <th>Hãng sản xuất</th>
-                      <th>Thao tác</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                      <?php foreach ($result as $items):?>
-                      <tr>
-                         <td><?php echo $items['MaMay'] ?></td> 
-                         <td><?php echo $items['TenMay'] ?></td> 
-                          <td><?php echo $items['SeriMay'] ?></td>  
-                          <td><?php echo $items['ChuKyBaoTri'] ?></td> 
-                          <td><?php echo $items['NamSanXuat'] ?></td> 
-                          <td><?php echo $items['HangSanXuat'] ?></td> 
-                          <td>
-                               <div class="d-flex gap-2">
-                                    <a href="updatemay.php?MaMay=<?php echo $items['MaMay']; ?>" 
-                                      class="btn btn-warning btn-sm">
-                                      <i class="fa fa-edit"></i> Sửa
-                                    </a>
-                                      <button class="btn btn-danger btn-sm" id="delete-<?php echo $items['MaMay']; ?>">
-                                        <i class="fa fa-trash"></i> Xóa
-                                      </button>
-
-                                  </div>
-                          </td>
-                      </tr>
-                    <?php endforeach ?>       
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
+    <div class="page-inner">
+        <div class="card">
+            <div class="card-header">
+            <div class="row">
+                        <!-- Cột 1 -->
+                        <div class="col-md-6">
+                            <h1>Chỉnh sửa thông tin máy</h1>
+                        </div>
+                        <?php if (!empty($error1)) : ?>
+                            <div class="col-md-6">
+                                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                                    <strong><?php echo $error1; ?></strong>
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>
+                        <?php endif; ?>
+                </div>
             </div>
-            </table>
-          </div>
-          </div>
+            <div class="card-body">
+            <form method="POST">
+        <div class="row">
+            <!-- Cột 1 -->
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="TenMay">Tên Máy</label>
+                    <input type="text" class="form-control" id="TenMay" name="TenMay" 
+                           value="<?php echo htmlspecialchars($may['TenMay']); ?>" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="SeriMay">Seri Máy</label>
+                    <input type="text" class="form-control" id="SeriMay" name="SeriMay"
+                           value="<?php echo htmlspecialchars($may['SeriMay']); ?>" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="ChuKyBaoTri">Chu Kỳ Bảo Trì</label>
+                    <div class="input-group mb-3">
+                        <input type="number" class="form-control" id="ChuKyBaoTri" name="ChuKyBaoTri" 
+                               value="<?php echo htmlspecialchars($may['ChuKyBaoTri']); ?>" required>
+                        <span class="input-group-text">Tháng</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Cột 2 -->
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="NamSanXuat">Năm Sản Xuất</label>
+                    <input type="number" class="form-control" id="NamSanXuat" name="NamSanXuat" 
+                           value="<?php echo htmlspecialchars($may['NamSanXuat']); ?>" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="HangSanXuat">Hãng Sản Xuất</label>
+                    <input type="text" class="form-control" id="HangSanXuat" name="HangSanXuat"
+                           value="<?php echo htmlspecialchars($may['HangSanXuat']); ?>" required>
+                </div>
+            </div>
+
+            <div class="form-group mt-4">
+                <button type="submit" name="update" class="btn btn-primary">
+                    <i class="fa fa-save"></i> Cập nhật
+                </button>
+                <a href="may.php" class="btn btn-secondary">Trở lại</a>
+            </div>
         </div>
-      </div> 
+    </form>
+            </div>
+        </div>
     </div>
+</div>
+
+
+        
     <!--   Core JS Files   -->
     <script src="assets/js/core/jquery-3.7.1.min.js"></script>
     <script src="assets/js/core/popper.min.js"></script>
@@ -295,18 +358,5 @@
 
     <!-- Kaiadmin JS -->
     <script src="assets/js/kaiadmin.min.js"></script>
-    <script>
-      document.addEventListener("DOMContentLoaded", function () {
-          let buttons = document.querySelectorAll("[id^=delete-]");
-          buttons.forEach(button => {
-              button.addEventListener("click", function () {
-                  let id = this.id.split("-")[1]; // Lấy ID từ delete-123
-                  if (confirm("Bạn có chắc chắn muốn xóa máy này?")) {
-                      window.location.href = `deletemay.php?id=${id}`;
-                  }
-              });
-          });
-      });
-    </script>
   </body>
 </html>
