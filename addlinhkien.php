@@ -1,4 +1,8 @@
 <?php
+session_start();
+if (!isset($_SESSION['TenNhanVien'])) {
+    header('Location: login.php');
+}
 include 'connect.php';
 $error1 = "";
 if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['submit'])) {
@@ -215,7 +219,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['submit'])) {
                   </a>
                 </li>
                 <li class="nav-item topbar-icon">
-                  <b class="ms-2">Xin chào, ABC</b>
+                  <b class="ms-2">Xin chào, <?php echo $_SESSION['TenNhanVien']?></b>
                 </li>
               </ul>
             </div>

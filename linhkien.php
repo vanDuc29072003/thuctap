@@ -1,5 +1,8 @@
 <?php
-
+  session_start();
+  if (!isset($_SESSION['TenNhanVien'])) {
+      header('Location: login.php');
+  }
   include 'connect.php';
   if(empty($_POST['submit'])){
      $sql = "SELECT * FROM linhkiensuachua";
@@ -193,7 +196,7 @@
                   </a>
                 </li>
                 <li class="nav-item topbar-icon">
-                  <b class="ms-2">Xin chào, ABC</b>
+                  <b class="ms-2">Xin chào, <?php echo $_SESSION['TenNhanVien']?></b>
                 </li>
               </ul>
             </div>
