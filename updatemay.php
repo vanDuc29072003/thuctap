@@ -1,4 +1,8 @@
 <?php
+session_start();
+if (!isset($_SESSION['TenNhanVien'])) {
+    header('Location: login.php');
+}
 include 'connect.php';
 
 // 1. Kiểm tra có nhận được MaMay từ URL không
