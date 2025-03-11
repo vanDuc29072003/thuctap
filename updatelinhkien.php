@@ -167,13 +167,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update'])) {
               </a>
             </li>
             <li class="nav-item ">
-              <a href="may.html" class="collapsed" aria-expanded="false">
+              <a href="may.php" class="collapsed" aria-expanded="false">
                 <i class="fa-solid fa-sliders"></i>
                 <p>Danh sách máy</p>
               </a>
             </li>
             <li class="nav-item ">
-              <a href="linhkien.html" class="collapsed" aria-expanded="false">
+              <a href="linhkien.php" class="collapsed" aria-expanded="false">
                 <i class="fa-solid fa-gears"></i>
                 <p>Danh sách linh kiện</p>
               </a>

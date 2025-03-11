@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 11, 2025 at 05:07 AM
+-- Generation Time: Mar 11, 2025 at 07:42 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -155,8 +155,8 @@ CREATE TABLE `nhanvien` (
 --
 
 INSERT INTO `nhanvien` (`MaNhanVien`, `TenNhanVien`, `DiaChi`, `Email`, `GioiTinh`, `NgaySinh`, `SDT`, `MaBoPhan`) VALUES
-(101, 'Le Van Luyen', 'thon Trang Bang - huyen Trang Tan - tp Hue', 'luyen98989@gmail.com', 'Nam', '1997-03-03', 123432333, 5),
-(102, 'Lo Van Hoa', 'xa Meo Ban - huyen Tuong Trung - tp Yen Bai', 'hoa2121@gmail.com', 'Nam', '1995-02-07', 987777456, 1);
+(101, 'Lê Văn Luyện\r\n', 'thon Trang Bang - huyen Trang Tan - tp Hue', 'luyen98989@gmail.com', 'Nam', '1997-03-03', 123432333, 5),
+(102, 'Lò Văn Hóa', 'xa Meo Ban - huyen Tuong Trung - tp Yen Bai', 'hoa2121@gmail.com', 'Nam', '1995-02-07', 987777456, 1);
 
 -- --------------------------------------------------------
 
