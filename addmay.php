@@ -1,7 +1,7 @@
 <?php
 session_start();
 if (!isset($_SESSION['TenNhanVien'])) {
-    header('Location: login.php');
+  header('Location: login.php');
 }
 include 'connect.php';
 
@@ -218,7 +218,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['submit'])) {
                 </a>
               </li>
               <li class="nav-item topbar-icon">
-                <b class="ms-2">Xin chào, <?php echo $_SESSION['TenNhanVien']?></b>
+                <b class="ms-2">Xin chào, <?php echo $_SESSION['TenNhanVien'] ?></b>
               </li>
             </ul>
           </div>
@@ -239,7 +239,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['submit'])) {
                       <strong><?php echo $error; ?></strong>
                       <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                     </div>
-                  </div>  
+                  </div>
                 <?php endif; ?>
                 <?php if (!empty($error1)): ?>
                   <div class="col-md-6">
@@ -341,14 +341,14 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['submit'])) {
   <script src="assets/js/kaiadmin.min.js"></script>
 
   <script>
-      document.getElementById('btn-logout').addEventListener('click', function(event) {
-          event.preventDefault();
-          var logout = confirm("Bạn có chắc chắn muốn đăng xuất?");
-          if (logout) {
-              window.location.href = 'logout.php';
-          }
-      });
-    </script>
+    document.getElementById('btn-logout').addEventListener('click', function (event) {
+      event.preventDefault();
+      var logout = confirm("Bạn có chắc chắn muốn đăng xuất?");
+      if (logout) {
+        window.location.href = 'logout.php';
+      }
+    });
+  </script>
 </body>
 
 </html>
