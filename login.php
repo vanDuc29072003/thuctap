@@ -25,7 +25,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $stmt->bindParam(':MaNhanVien', $MaNhanVien);
             $stmt->execute();
             $TenNhanVien = $stmt->fetch(PDO::FETCH_ASSOC);
-        
+
             $_SESSION['TenNhanVien'] = $TenNhanVien['TenNhanVien'];
             header('Location: index.php');
             exit;
@@ -39,10 +39,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-<meta charset="UTF-8">
+    <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-<meta charset="UTF-8"/>
+    <meta charset="UTF-8" />
     <title>Đăng nhập</title>
     <meta content="width=device-width, initial-scale=1.0, shrink-to-fit=no" name="viewport" />
     <link rel="icon" href="assets/img/logo.png" type="image/x-icon" />
@@ -75,8 +76,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <div class="card w-auto">
                 <div class="row">
                     <div class="col-6">
-                        <img src="assets/img/login-img.jpg" alt="anh"
-                            class="img-fluid" style="border-radius: 1rem;height: 65vh;" />
+                        <img src="assets/img/login-img.jpg" alt="anh" class="img-fluid"
+                            style="border-radius: 1rem;height: 65vh;" />
                     </div>
                     <div class="col-6 d-flex justify-content-center align-items-center text-center">
                         <div>
@@ -94,29 +95,21 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                     </div>
                                     <div class="form-group text-start">
                                         <label>Mật khẩu</label>
-                                        <input type="password" class="form-control" name="MatKhau" id="matkhau" placeholder="Mật khẩu">
+                                        <input type="password" class="form-control" name="MatKhau" id="matkhau"
+                                            placeholder="Mật khẩu">
                                     </div>
-                                    <div class="form-check text-start">
-                                        <input type="checkbox" class="form-check-input" id="exampleCheck1">
-                                        <label class="form-check-label" for="exampleCheck1">Nhớ mật khẩu?</label>
-                                    </div>
-                                  
-                                    <?php if (!empty($error2)) : ?>
+                                    <?php if (!empty($error2)): ?>
                                         <div class="alert alert-danger" role="alert">
-                                                <?php echo $error2; ?>
-                                            </div>
+                                            <?php echo $error2; ?>
+                                        </div>
+                                    <?php endif; ?>
+                                    <?php if (!empty($error)): ?>
+                                        <div class="alert alert-danger" role="alert">
+                                            <?php echo $error; ?>
+                                        </div>
                                     <?php endif; ?>
 
-                                        <?php if (!empty($error)) : ?>
-                                            <div class="alert alert-danger" role="alert">
-                                                <?php echo $error; ?>
-                                            </div>
-                                        <?php endif; ?>
-
                                     <button type="submit" name="submit" class="btn btn-primary">Đăng nhập</button>
-
-                                    
-                                   
                                 </form>
                             </div>
                         </div>
