@@ -1,3 +1,38 @@
+<?php
+include 'connect.php';
+$error1 = "";
+if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['submit'])) {
+  if (isset($_POST['TenLinhKien'], $_POST['GiaThanh'], $_POST['SoLuong'], $_POST['DonViTinh'], $_POST['MoTa'], $_POST['Kho'], $_POST['NhaCungCap'])) {
+    $TenLinhKien = $_POST['TenLinhKien'];
+    $GiaThanh = $_POST['GiaThanh'];
+    $SoLuong = $_POST['SoLuong'];
+    $DonViTinh = $_POST['DonViTinh'];
+    $MoTa = $_POST['MoTa'];
+    $Kho = $_POST['Kho'];
+    $NhaCungCap = $_POST['NhaCungCap'];
+
+    // Chuẩn bị truy vấn SQL
+    $sql = "INSERT INTO linhkiensuachua (TenLinhKien, GiaThanh, SoLuong, DonViTinh, MoTa, Kho, NhaCungCap) VALUES (:TenLinhKien, :GiaThanh, :SoLuong, :DonViTinh, :MoTa, :Kho, :NhaCungCap)";
+                
+
+    $stmt = $conn->prepare($sql);
+    $stmt->bindParam(':TenLinhKien', $TenLinhKien);
+    $stmt->bindParam(':GiaThanh', $GiaThanh, PDO::PARAM_INT);
+    $stmt->bindParam(':SoLuong', $SoLuong, PDO::PARAM_INT);
+    $stmt->bindParam(':DonViTinh', $DonViTinh);
+    $stmt->bindParam(':Kho', $Kho);
+    $stmt->bindParam(':MoTa', $MoTa);
+    $stmt->bindParam(':NhaCungCap', $NhaCungCap);
+    try {
+      if ($stmt->execute()) {
+        $error1 = "Thêm linh kiện mới thành công";
+      }
+    } catch (Exception $e) {
+      
+    }
+  }
+  }
+?>
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -187,99 +222,88 @@
           </nav>
         </div>
         <div class="container">
-          <div class="page-inner">
-            <div class="table-responsive">
-            <table class="table table-bordered">
-              <div class="d-flex justify-content-between align-items-center mb-3">
-                <h1 class="mb-0">Danh sách linh kiện</h1>
-                <button class="btn btn-primary">
-                  <i class="fa fa-plus"></i> Thêm mới
-                </button>
-              </div>              
-              <div class="table-responsive">
-                <table class="table table-bordered">
-                  <thead style="background-color: pink; color: black;">
-                    <tr>
-                      <th>#</th>
-                      <th>Table heading</th>
-                      <th>Table heading</th>
-                      <th>Table heading</th>
-                      <th>Table heading</th>
-                      <th>Table heading</th>
-                      <th>Cập nhật</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <th scope="row">1</th>
-                      <td>Table cell</td>
-                      <td>Table cell</td>
-                      <td>Table cell</td>
-                      <td>Table cell</td>
-                      <td>Table cell</td>
-                      <td>
-                        
-                          <div class="d-flex gap-2">
-                            <button class="btn btn-warning btn-sm">
-                              <i class="fa fa-edit"></i> Sửa
-                            </button>
-                            <button class="btn btn-danger btn-sm">
-                              <i class="fa fa-trash"></i> Xóa
-                            </button>
-                          </div>
-                        
-                      </td>
-                    </tr>
-                    <tr>
-                      <th scope="row">2</th>
-                      <td>Table cell</td>
-                      <td>Table cell</td>
-                      <td>Table cell</td>
-                      <td>Table cell</td>
-                      <td>Table cell</td>                   
-                      <td>
-                        
-                          <div class="d-flex gap-2">
-                            <button class="btn btn-warning btn-sm">
-                              <i class="fa fa-edit"></i> Sửa
-                            </button>
-                            <button class="btn btn-danger btn-sm">
-                              <i class="fa fa-trash"></i> Xóa
-                            </button>
-                          </div>
-                        
-                      </td>
-                    </tr>
-                    <tr>
-                      <th scope="row">3</th>
-                      <td>Table cell</td>
-                      <td>Table cell</td>
-                      <td>Table cell</td>
-                      <td>Table cell</td>
-                      <td>Table cell</td>
-                      <td>
-                        
-                          <div class="d-flex gap-2">
-                            <button class="btn btn-warning btn-sm">
-                              <i class="fa fa-edit"></i> Sửa
-                            </button>
-                            <button class="btn btn-danger btn-sm">
-                              <i class="fa fa-trash"></i> Xóa
-                            </button>
-                          </div>
-                                               
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
+        <div class="page-inner">
+          <div class="card">
+            <div class="card-header">
+              <div class="row">
+                <!-- Cột 1 -->
+                <div class="col-md-6">
+                  <h1>Thêm Linh Kiện Sửa Chữa Mới</h1>
+                </div>
+                <?php if (!empty($error1)): ?>
+                  <div class="col-md-6">
+                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                      <strong><?php echo $error1; ?></strong>
+                      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                  </div>
+                <?php endif; ?>
+              </div>
+              <div class="card-body">
+                <form method="POST">
+                  <div class="row">
+                    <!-- Cột 1 -->
+                    <div class="col-md-6">
+                      <div class="form-group">
+                        <label for="TenLinhKien">Tên Linh Kiện</label>
+                        <input type="text" class="form-control" id="TenLinhKien" name="TenLinhKien" required>
+                      </div>
+
+                      <div class="form-group">
+                        <label for="NhaCungCap">Nhà Cung Cấp</label>
+                        <input type="text" class="form-control" id="NhaCungCap" name="NhaCungCap" required>
+                      </div>
+
+                      <div class="form-group">
+                        <label for="Kho">Kho</label>
+                        <input type="text" class="form-control" id="Kho" name="Kho" required>
+                      </div>
+                      <div class="form-group">
+                        <label for="DonViTinh">Đơn Vị Tính</label>
+                        <select class="form-control input-square" id="DonViTinh" name="DonViTinh" required>
+                          <option>Cái</option>
+                          <option>Bộ</option>
+                          <option>Tấm</option>
+                        </select>
+                      </div>
+                      
+                    </div>
+
+                    <!-- Cột 2 -->
+                    <div class="col-md-6">
+              
+                      <div class="form-group">
+                        <label for="GiaThanh">Giá Thành</label>
+                        <input type="number" class="form-control" id="GiaThanh" name="GiaThanh" required>
+                      </div>
+
+                      <div class="form-group">
+                        <label for="SoLuong">Số Lượng</label>
+                        <div class="input-group mb-3">
+                        <input type="number" class="form-control" id="SoLuong" name="SoLuong" required>
+                        </div>
+                      </div>
+                      <div class="form-group">
+                        <label for="MoTa">Mô Tả</label>
+                        <textarea class="form-control" id="MoTa" name="MoTa"  aria-label="With textarea"></textarea>
+                      </div>
+                    </div>
+                    <div class="form-group mt-4">
+                      <button type="submit" name="submit" class="btn btn-primary">
+                        <i class="fa fa-save"></i> Tạo Mới
+                      </button>
+                      <a href="linhkien.php" class="btn btn-secondary">Trở lại</a>
+                    </div>
+                  </div> <!-- End Row -->
+                </form>
               </div>
             </div>
-            </table>
-          </div>
           </div>
         </div>
+      </div>
       </div> 
     </div>
+
     <!--   Core JS Files   -->
     <script src="assets/js/core/jquery-3.7.1.min.js"></script>
     <script src="assets/js/core/popper.min.js"></script>
