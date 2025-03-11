@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 10, 2025 at 10:47 AM
+-- Generation Time: Mar 11, 2025 at 05:07 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -82,21 +82,22 @@ CREATE TABLE `linhkiensuachua` (
 --
 
 INSERT INTO `linhkiensuachua` (`MaLinhKien`, `TenLinhKien`, `MoTa`, `GiaThanh`, `SoLuong`, `DonViTinh`, `NhaCungCap`, `Kho`) VALUES
-(1, 'Đầu in', 'Bộ phận in chính của máy in offset', 5000000, 10, 'Cái', 'Công ty A', 'Kho 1'),
-(2, 'Trục lô mực', 'Trục quay giúp chuyển mực lên bề mặt in', 1200000, 20, 'Cái', 'Công ty B', 'Kho 2'),
-(3, 'Hệ thống cấp mực', 'Cung cấp mực in từ hộp chứa đến trục lô mực', 800000, 15, 'Bộ', 'Công ty C', 'Kho 3'),
-(4, 'Bản in offset', 'Tấm bản in bằng kim loại dùng trong in offset', 300000, 50, 'Tấm', 'Công ty D', 'Kho 1'),
-(5, 'Motor kéo giấy', 'Động cơ kéo giấy qua các trục lô trong quá trình in', 2500000, 5, 'Cái', 'Công ty E', 'Kho 2'),
-(6, 'Lưỡi dao cắt', 'Lưỡi dao chuyên dụng để cắt giấy theo yêu cầu', 700000, 30, 'Cái', 'Công ty F', 'Kho 1'),
-(7, 'Khuôn bế', 'Khuôn dùng để dập và tạo hình sản phẩm in', 1500000, 10, 'Bộ', 'Công ty G', 'Kho 3'),
-(8, 'Trục ép nhiệt', 'Trục lăn có tác dụng ép nhiệt trong quá trình in', 2200000, 8, 'Cái', 'Công ty H', 'Kho 2'),
-(9, 'Con lăn ép keo', 'Con lăn giúp dán keo lên bề mặt sản phẩm', 900000, 25, 'Cái', 'Công ty I', 'Kho 3'),
-(10, 'Hệ thống hút giấy', 'Dùng để hút giấy từ khay và đưa vào máy in', 3200000, 7, 'Bộ', 'Công ty J', 'Kho 1'),
-(11, 'Hệ thống làm khô', 'Bộ phận giúp sấy khô mực in nhanh chóng', 2800000, 6, 'Bộ', 'Công ty K', 'Kho 2'),
-(12, 'Bộ điều khiển điện', 'Mạch điện điều khiển hoạt động của máy', 1800000, 12, 'Bộ', 'Công ty L', 'Kho 3'),
-(13, 'Cảm biến giấy', 'Cảm biến giúp nhận diện giấy trong máy in', 450000, 40, 'Cái', 'Công ty M', 'Kho 1'),
-(14, 'Dây curoa truyền động', 'Dây curoa kết nối và truyền lực giữa các bộ phận', 600000, 20, 'Sợi', 'Công ty N', 'Kho 2'),
-(15, 'Bộ phận phun dầu', 'Bộ phận giúp bôi trơn các trục quay', 750000, 15, 'Bộ', 'Công ty O', 'Kho 3');
+(1, 'Đầu in', 'Bộ phận in chính của máy in offset', 5000000, 101, 'Cái', 'Công ty Ajiko', 'Kho 1'),
+(2, 'Trục lô mực', 'Trục quay giúp chuyển mực lên bề mặt in', 1200000, 20, 'Cái', 'Công ty Simsum', 'Kho 2'),
+(3, 'Hệ thống cấp mực', 'Cung cấp mực in từ hộp chứa đến trục lô mực', 800000, 15, 'Bộ', 'Công ty Croka\r\n', 'Kho 3'),
+(4, 'Bản in offset', 'Tấm bản in bằng kim loại dùng trong in offset', 300000, 50, 'Tấm', 'Công ty Daiko', 'Kho 1'),
+(5, 'Motor kéo giấy', 'Động cơ kéo giấy qua các trục lô trong quá trình in', 2500000, 5, 'Cái', 'Công ty Baiko', 'Kho 2'),
+(6, 'Lưỡi dao cắt', 'Lưỡi dao chuyên dụng để cắt giấy theo yêu cầu', 700000, 30, 'Cái', 'Công ty Fuji', 'Kho 1'),
+(7, 'Khuôn bế', 'Khuôn dùng để dập và tạo hình sản phẩm in', 1500000, 10, 'Bộ', 'Công ty Fuji', 'Kho 3'),
+(8, 'Trục ép nhiệt', 'Trục lăn có tác dụng ép nhiệt trong quá trình in', 2200000, 8, 'Cái', 'Công ty Ajiko', 'Kho 2'),
+(9, 'Con lăn ép keo', 'Con lăn giúp dán keo lên bề mặt sản phẩm', 900000, 25, 'Cái', 'Công ty Ajiko', 'Kho 3'),
+(10, 'Hệ thống hút giấy', 'Dùng để hút giấy từ khay và đưa vào máy in', 3200000, 7, 'Bộ', 'Công ty Simsum', 'Kho 1'),
+(11, 'Hệ thống làm khô', 'Bộ phận giúp sấy khô mực in nhanh chóng', 2800000, 6, 'Bộ', 'Công ty Baiko', 'Kho 2'),
+(12, 'Bộ điều khiển điện', 'Mạch điện điều khiển hoạt động của máy', 1800000, 12, 'Bộ', 'Công ty Baiko', 'Kho 3'),
+(13, 'Cảm biến giấy', 'Cảm biến giúp nhận diện giấy trong máy in', 450000, 40, 'Cái', 'Công ty Baiko', 'Kho 1'),
+(14, 'Dây curoa truyền động', 'Dây curoa kết nối và truyền lực giữa các bộ phận', 600000, 20, 'Sợi', 'Công ty Simsum', 'Kho 2'),
+(15, 'Bộ phận phun dầu', 'Bộ phận giúp bôi trơn các trục quay', 750000, 15, 'Bộ', 'Công ty Croka', 'Kho 3'),
+(16, 'Pin', 'Pin cho máy bắn vít', 500000, 70, 'Cái', 'Pinny', 'Kho 1 ');
 
 -- --------------------------------------------------------
 
@@ -118,7 +119,7 @@ CREATE TABLE `may` (
 --
 
 INSERT INTO `may` (`MaMay`, `TenMay`, `SeriMay`, `ChuKyBaoTri`, `NamSanXuat`, `HangSanXuat`) VALUES
-(1, 'Máy in ', 'OF12345XYZ', 37, '2000', 'Ajax'),
+(1, 'Máy in ', 'OF12345XYZ', 4, '2000', 'Ajax'),
 (2, 'Máy bế ', 'CG98765ABC', 101, '2001', 'Cannon'),
 (3, 'May cắt giấy', 'BH45678DEF', 2, '2005', 'Bimmum'),
 (4, 'Máy ép kim', 'EK78901PQR', 7, '2023', 'Konica Minolta'),
@@ -128,10 +129,9 @@ INSERT INTO `may` (`MaMay`, `TenMay`, `SeriMay`, `ChuKyBaoTri`, `NamSanXuat`, `H
 (8, 'Máy in Flexo', 'FL87654BCD', 1, '2020', 'Heidelberg'),
 (9, 'Máy ghép màng', 'GM43210EFG', 2, '2018', 'Kodak'),
 (10, 'Máy bế ', 'TKHT2001HQ ', 2, '2023', 'Fuji'),
-(17, 'Máy ôm ', 'TKHT2000HQ ', 2, '2023', 'Fuji'),
-(42, 'Máy ôm ', 'TKHT2009HQ ', 2, '2023', 'Fuji'),
-(43, 'Máy ôm ', 'TKHT2008HQ ', 2, '2023', 'Fuji'),
-(44, 'Máy ôm ', 'TKHQ2008HQ ', 2, '2023', 'Fuji');
+(17, 'Máy ép UV', 'TKHT2000HQ ', 2, '2023', 'Nagato'),
+(42, 'Máy in', 'TKHT2009HQ ', 2, '2023', 'Toyota\r\n'),
+(43, 'Máy ép sóng', 'TKHT2008HQ ', 2, '2023', 'Fuji');
 
 -- --------------------------------------------------------
 
@@ -198,7 +198,7 @@ CREATE TABLE `taikhoan` (
 --
 
 INSERT INTO `taikhoan` (`TenTaiKhoan`, `MatKhau`, `MaNhanVien`) VALUES
-('nv101', 'admin101', 101);
+('ad101', 'admin101', 101);
 
 --
 -- Indexes for dumped tables
@@ -272,13 +272,13 @@ ALTER TABLE `lichbaotri`
 -- AUTO_INCREMENT for table `linhkiensuachua`
 --
 ALTER TABLE `linhkiensuachua`
-  MODIFY `MaLinhKien` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+  MODIFY `MaLinhKien` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
 
 --
 -- AUTO_INCREMENT for table `may`
 --
 ALTER TABLE `may`
-  MODIFY `MaMay` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=45;
+  MODIFY `MaMay` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=47;
 
 --
 -- AUTO_INCREMENT for table `nhanvien`
