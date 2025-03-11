@@ -165,7 +165,7 @@
                 </div>
               </li>
               <li class="nav-item ">
-                <a href="logout.php" class="collapsed" aria-expanded="false">
+                <a href="logout.php" id="btn-logout" class="collapsed" aria-expanded="false">
                   <i class="fa-solid fa-right-from-bracket"></i>
                   <p>Đăng xuất</p>
                 </a>
@@ -306,6 +306,15 @@
                   }
               });
           });
+      });
+    </script>
+    <script>
+      document.getElementById('btn-logout').addEventListener('click', function(event) {
+          event.preventDefault();
+          var logout = confirm("Bạn có chắc chắn muốn đăng xuất?");
+          if (logout) {
+              window.location.href = 'logout.php';
+          }
       });
     </script>
   </body>
