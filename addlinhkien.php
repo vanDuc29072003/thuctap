@@ -16,8 +16,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['submit'])) {
     $NhaCungCap = $_POST['NhaCungCap'];
 
     // Chuẩn bị truy vấn SQL
-    $sql = "INSERT INTO linhkiensuachua (TenLinhKien, GiaThanh, SoLuong, DonViTinh, MoTa, Kho, NhaCungCap) VALUES (:TenLinhKien, :GiaThanh, :SoLuong, :DonViTinh, :MoTa, :Kho, :NhaCungCap)";
-                
+    $sql = "INSERT INTO linhkiensuachua (TenLinhKien, GiaThanh, SoLuong, DonViTinh, MoTa, Kho, NhaCungCap) VALUES (:TenLinhKien, :GiaThanh, :SoLuong, :DonViTinh, :MoTa, :Kho, :NhaCungCap)";              
 
     $stmt = $conn->prepare($sql);
     $stmt->bindParam(':TenLinhKien', $TenLinhKien);

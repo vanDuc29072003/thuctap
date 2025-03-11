@@ -246,7 +246,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update'])) {
                 </a>
               </li>
               <li class="nav-item topbar-icon">
-                <b class="ms-2">Xin chào, ABC</b>
+                <b class="ms-2">Xin chào, <?php echo $_SESSION['TenNhanVien']?></b>
               </li>
             </ul>
           </div>
