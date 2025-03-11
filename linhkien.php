@@ -1,16 +1,22 @@
 <?php
-  session_start();
-  if (!isset($_SESSION['TenNhanVien'])) {
-      header('Location: login.php');
+
+  include 'connect.php';
+  if(empty($_POST['submit'])){
+     $sql = "SELECT * FROM linhkiensuachua";
+  $stmt = $conn->prepare($sql);
+  $query = $stmt->execute();
+  $result= array();
+  while ($row=$stmt->fetch(PDO::FETCH_ASSOC)){
+    $result[] = $row;
+     }
   }
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta charset="UTF-8"/>
+<meta charset="UTF-8"/>
     <title>CTY TNHH IN T.KHOA</title>
     <meta content="width=device-width, initial-scale=1.0, shrink-to-fit=no" name="viewport" />
     <link rel="icon" href="assets/img/logo.png" type="image/x-icon" />
@@ -86,12 +92,12 @@
                       <a href="lichbaotri.html">
                       <span class="sub-item">Lịch bảo trì</span>
                     </a>
-                  </li>
-                  <li>
-                    <a href="lichsuachua.html">
-                    <span class="sub-item">Lịch sửa chữa</span>
-                  </a>
-                  </li>
+                    </li>
+                    <li>
+                      <a href="lichsuachua.html">
+                      <span class="sub-item">Lịch sửa chữa</span>
+                    </a>
+                    </li>
                   </ul>
                 </div>
               </li>
@@ -102,13 +108,13 @@
                 </a>
               </li>
               <li class="nav-item ">
-                <a href="may.php" class="collapsed" aria-expanded="false">
+                <a href="may.html" class="collapsed" aria-expanded="false">
                   <i class="fa-solid fa-sliders"></i>
                   <p>Danh sách máy</p>
                 </a>
               </li>
               <li class="nav-item ">
-                <a href="linhkien.php" class="collapsed" aria-expanded="false">
+                <a href="linhkien.html" class="collapsed" aria-expanded="false">
                   <i class="fa-solid fa-gears"></i>
                   <p>Danh sách linh kiện</p>
                 </a>
@@ -158,7 +164,7 @@
                 </div>
               </li>
               <li class="nav-item ">
-                <a href="logout.php" id="btn-logout"class="collapsed" aria-expanded="false">
+                <a href="logout.php" class="collapsed" aria-expanded="false">
                   <i class="fa-solid fa-right-from-bracket"></i>
                   <p>Đăng xuất</p>
                 </a>
@@ -187,20 +193,72 @@
                   </a>
                 </li>
                 <li class="nav-item topbar-icon">
-                  <b class="ms-2">Xin chào, <?php echo $_SESSION['TenNhanVien']?></b>
-                </li>  
+                  <b class="ms-2">Xin chào, ABC</b>
+                </li>
               </ul>
             </div>
           </nav>
         </div>
+        <div class="container">
+          <div class="page-inner">
+            <div class="table-responsive">
+            <table class="table table-bordered">
+              <div class="d-flex justify-content-between align-items-center mb-3">
+                <h1 class="mb-0">Danh sách linh kiện</h1>
+                <a href="addlinhkien.php" style="color: white;">
+                <button class="btn btn-primary">
+                  <i class="fa fa-plus"></i> Thêm mới
+                </button>
+              </div>              
+              <div class="table-responsive">
+                <table class="table table-bordered">
+                  <thead style="background-color: pink; color: black;">
+                    <tr>
+                      <th>Mã Linh Kiện</th>
+                      <th>Tên Linh Kiện</th>
+                      <th>Giá Thành</th>
+                      <th>Số Lượng</th>
+                      <th>Đơn Vị Tính</th>
+                      <th>Mô Tả</th>
+                      <th>Nhà Cung Cấp</th>
+                      <th>Kho </th>
+                      <th>Cập nhật</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                      <?php foreach ($result as $items):?>
+                      <tr>
+                         <td><?php echo $items['MaLinhKien'] ?></td> 
+                         <td><?php echo $items['TenLinhKien'] ?></td> 
+                          <td><?php echo $items['GiaThanh'] ?></td>  
+                          <td><?php echo $items['SoLuong'] ?></td> 
+                          <td><?php echo $items['DonViTinh'] ?></td> 
+                          <td><?php echo $items['MoTa'] ?></td> 
+                          <td><?php echo $items['NhaCungCap'] ?></td> 
+                          <td><?php echo $items['Kho'] ?></td> 
+                          <td>
+                          <div class="d-flex gap-2">
+                                    <a href="updatelinhkien.php?MaLinhKien=<?php echo $items['MaLinhKien']; ?>" 
+                                      class="btn btn-warning btn-sm">
+                                      <i class="fa fa-edit"></i> Sửa
+                                    </a>
+                                      <button class="btn btn-danger btn-sm" id="delete-<?php echo $items['MaLinhKien']; ?>">
+                                        <i class="fa fa-trash"></i> Xóa
+                                      </button>
+                                  </div>
+                          </td>
+                      </tr>
+                    <?php endforeach ?>       
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            </table>
+          </div>
+          </div>
+        </div>
       </div> 
-      <div class="container">
-      </div>
-
-        <footer class="footer">
-          
-        </footer>
-      </div>
     </div>
     <!--   Core JS Files   -->
     <script src="assets/js/core/jquery-3.7.1.min.js"></script>
@@ -239,14 +297,17 @@
 
     <!-- Kaiadmin JS -->
     <script src="assets/js/kaiadmin.min.js"></script>
-
     <script>
-      document.getElementById('btn-logout').addEventListener('click', function(event) {
-          event.preventDefault();
-          var logout = confirm("Bạn có chắc chắn muốn đăng xuất?");
-          if (logout) {
-              window.location.href = 'logout.php';
-          }
+      document.addEventListener("DOMContentLoaded", function () {
+          let buttons = document.querySelectorAll("[id^=delete-]");
+          buttons.forEach(button => {
+              button.addEventListener("click", function () {
+                  let id = this.id.split("-")[1]; // Lấy ID từ delete-123
+                  if (confirm("Bạn có chắc chắn muốn xóa máy này?")) {
+                      window.location.href = `deletelinhkien.php?id=${id}`;
+                  }
+              });
+          });
       });
     </script>
   </body>
