@@ -374,7 +374,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update'])) {
               window.location.href = 'logout.php';
           }
       });
-    </script>
+  </script>
 </body>
 
 </html>
