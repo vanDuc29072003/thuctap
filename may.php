@@ -320,6 +320,22 @@ if (empty($_POST['submit'])) {
       }
     });
   </script>
+  <script>
+        <?php if (!empty($_SESSION['errorPermission'])): ?>
+            $.notify({
+                title: 'Lỗi',
+                message: '<?php echo $_SESSION['errorPermission']; ?>',
+                icon: 'icon-bell'
+            },{
+                type: 'danger',
+                animate: {
+                    enter: 'animated shake',
+                    exit: 'animated fadeOutUp'
+                },
+            });
+            <?php unset($_SESSION['errorPermission']) ?>
+        <?php endif; ?>
+    </script>
 </body>
 
 </html>

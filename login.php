@@ -21,6 +21,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $TenNhanVien = $stmt->fetch(PDO::FETCH_ASSOC);
 
             $_SESSION['TenNhanVien'] = $TenNhanVien['TenNhanVien'];
+            $_SESSION['MaBoPhan'] = $MaBoPhan['MaBoPhan'];
             header('Location: index.php');
             exit;
         } else {
