@@ -2,13 +2,7 @@
 session_start();
 include 'connect.php';
 
-$error = "";   // Biến lưu thông báo lỗi đăng nhập
-$error2 = "";  // Biến lưu thông báo chưa nhập tài khoản
-
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    if (empty($_POST['MaNhanVien']) || empty($_POST['MatKhau'])) {
-        $error2 = "Chưa nhập thông tin tài khoản";
-    } else {
         $MaNhanVien = $_POST['MaNhanVien'];
         $MatKhau = $_POST['MatKhau'];
 
@@ -30,10 +24,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             header('Location: index.php');
             exit;
         } else {
-            $error = "Sai Mã nhân viên hoặc Mật khẩu";
+            $_SESSION['error'] = "Sai Mã nhân viên hoặc Mật khẩu";
+            header('Location: login.php');
+            exit;
         }
     }
-}
 ?>
 
 
@@ -91,25 +86,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                     <div class="form-group text-start">
                                         <label>Mã nhân viên</label>
                                         <input type="text" class="form-control" id="manhanvien" name="MaNhanVien"
-                                            placeholder="Nhập mã nhân viên">
+                                            placeholder="Nhập mã nhân viên" required>
                                     </div>
                                     <div class="form-group text-start">
                                         <label>Mật khẩu</label>
                                         <input type="password" class="form-control" name="MatKhau" id="matkhau"
-                                            placeholder="Mật khẩu">
+                                            placeholder="Mật khẩu" required>
                                     </div>
-                                    <?php if (!empty($error2)): ?>
-                                        <div class="alert alert-danger" role="alert">
-                                            <?php echo $error2; ?>
-                                        </div>
-                                    <?php endif; ?>
-                                    <?php if (!empty($error)): ?>
-                                        <div class="alert alert-danger" role="alert">
-                                            <?php echo $error; ?>
-                                        </div>
-                                    <?php endif; ?>
-
-                                    <button type="submit" name="submit" class="btn btn-primary">Đăng nhập</button>
+                                    <div class="form-group mt-4">
+                                        <button type="submit" name="submit" class="btn btn-primary">Đăng nhập</button>
+                                    </div>
                                 </form>
                             </div>
                         </div>
@@ -155,6 +141,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     <!-- Kaiadmin JS -->
     <script src="assets/js/kaiadmin.min.js"></script>
+
+    <script>
+        <?php if (!empty($_SESSION['error'])): ?>
+            $.notify({
+                title: 'Lỗi',
+                message: '<?php echo $_SESSION['error']; ?>',
+                icon: 'icon-bell'
+            },{
+                type: 'danger',
+            });
+            <?php unset($_SESSION['error']) ?>
+        <?php endif; ?>
+    </script>
 
 </body>
 
