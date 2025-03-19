@@ -14,14 +14,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
         if ($user) {
-            $sql = "SELECT TenNhanVien FROM nhanvien WHERE MaNhanVien = :MaNhanVien";
+            $sql = "SELECT * FROM nhanvien WHERE MaNhanVien = :MaNhanVien";
             $stmt = $conn->prepare($sql);
             $stmt->bindParam(':MaNhanVien', $MaNhanVien);
             $stmt->execute();
-            $TenNhanVien = $stmt->fetch(PDO::FETCH_ASSOC);
+            $NhanVien = $stmt->fetch(PDO::FETCH_ASSOC);
 
-            $_SESSION['TenNhanVien'] = $TenNhanVien['TenNhanVien'];
-            $_SESSION['MaBoPhan'] = $MaBoPhan['MaBoPhan'];
+            $_SESSION['TenNhanVien'] = $NhanVien['TenNhanVien'];
+            $_SESSION['MaBoPhan'] = $NhanVien['MaBoPhan'];
             header('Location: index.php');
             exit;
         } else {

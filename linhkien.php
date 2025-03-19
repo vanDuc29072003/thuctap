@@ -216,8 +216,8 @@ if (empty($_POST['submit'])) {
                   </button>
               </div>
               <div class="table-responsive">
-                <table class="table table-bordered">
-                  <thead style="background-color: pink; color: black;">
+                <table id="basic-datatables" class="display table table-hover border border-2" cellspacing="0" width="100%">
+                  <thead>
                     <tr>
                       <th>Mã Linh Kiện</th>
                       <th>Tên Linh Kiện</th>
@@ -258,8 +258,8 @@ if (empty($_POST['submit'])) {
                   </tbody>
                 </table>
               </div>
+            </table>
           </div>
-          </table>
         </div>
       </div>
     </div>
@@ -322,6 +322,9 @@ if (empty($_POST['submit'])) {
         window.location.href = 'logout.php';
       }
     });
+  </script>
+  <script>
+    $('#basic-datatables').DataTable();
   </script>
 </body>
 
