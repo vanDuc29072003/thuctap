@@ -151,6 +151,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 icon: 'icon-bell'
             },{
                 type: 'danger',
+                animate: {
+                    enter: 'animated shake',
+                    exit: 'animated fadeOutUp'
+                },
             });
             <?php unset($_SESSION['error']) ?>
         <?php endif; ?>
