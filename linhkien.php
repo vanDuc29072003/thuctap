@@ -226,7 +226,6 @@ if (empty($_POST['submit'])) {
                       <th>Đơn Vị Tính</th>
                       <th>Mô Tả</th>
                       <th>Nhà Cung Cấp</th>
-                      <th>Kho </th>
                       <th>Cập nhật</th>
                     </tr>
                   </thead>
@@ -237,10 +236,9 @@ if (empty($_POST['submit'])) {
                         <td><?php echo $items['TenLinhKien'] ?></td>
                         <td><?php echo $items['GiaThanh'] ?></td>
                         <td><?php echo $items['SoLuong'] ?></td>
-                        <td><?php echo $items['DonViTinh'] ?></td>
+                        <td><?php echo $items['MaDonViTinh'] ?></td>
                         <td><?php echo $items['MoTa'] ?></td>
                         <td><?php echo $items['NhaCungCap'] ?></td>
-                        <td><?php echo $items['Kho'] ?></td>
                         <td>
                           <div class="d-flex gap-2">
                             <a href="updatelinhkien.php?MaLinhKien=<?php echo $items['MaLinhKien']; ?>"
