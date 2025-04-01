@@ -1,7 +1,6 @@
 <?php
 include 'rbac.php';
 requirePermission('them_may', $conn);
-session_start();
 if (!isset($_SESSION['TenNhanVien'])) {
   header('Location: login.php');
 }

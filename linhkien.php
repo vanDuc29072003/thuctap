@@ -5,7 +5,12 @@ if (!isset($_SESSION['TenNhanVien'])) {
 }
 include 'connect.php';
 if (empty($_POST['submit'])) {
-  $sql = "SELECT * FROM linhkiensuachua";
+  $sql = "
+  SELECT lk.*, dvt.TenDonViTinh, ncc.TenNhaCungCap
+  FROM linhkiensuachua lk
+  LEFT JOIN donvitinh dvt ON lk.MaDonViTinh = dvt.MaDonViTinh
+  LEFT JOIN nhacungcap ncc ON lk.MaNhaCungCap = ncc.MaNhaCungCap
+";
   $stmt = $conn->prepare($sql);
   $query = $stmt->execute();
   $result = array();
@@ -225,7 +230,7 @@ if (empty($_POST['submit'])) {
                       <th>Số Lượng</th>
                       <th>Đơn Vị Tính</th>
                       <th>Mô Tả</th>
-                      <th>Nhà Cung Cấp</th>
+                      <th>Tên Nhà Cung Cấp</th>
                       <th>Cập nhật</th>
                     </tr>
                   </thead>
@@ -236,9 +241,9 @@ if (empty($_POST['submit'])) {
                         <td><?php echo $items['TenLinhKien'] ?></td>
                         <td><?php echo $items['GiaThanh'] ?></td>
                         <td><?php echo $items['SoLuong'] ?></td>
-                        <td><?php echo $items['MaDonViTinh'] ?></td>
+                        <td><?php echo $items['TenDonViTinh'] ?></td>
                         <td><?php echo $items['MoTa'] ?></td>
-                        <td><?php echo $items['NhaCungCap'] ?></td>
+                        <td><?php echo $items['TenNhaCungCap'] ?></td>
                         <td>
                           <div class="d-flex gap-2">
                             <a href="updatelinhkien.php?MaLinhKien=<?php echo $items['MaLinhKien']; ?>"

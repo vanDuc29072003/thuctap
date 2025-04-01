@@ -6,17 +6,17 @@ if (!isset($_SESSION['TenNhanVien'])) {
 include 'connect.php';
 $error1 = "";
 if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['submit'])) {
-  if (isset($_POST['TenLinhKien'], $_POST['GiaThanh'], $_POST['SoLuong'], $_POST['DonViTinh'], $_POST['MoTa'], $_POST['Kho'], $_POST['NhaCungCap'])) {
+  if (isset($_POST['TenLinhKien'], $_POST['GiaThanh'], $_POST['SoLuong'], $_POST['DonViTinh'], $_POST['MoTa'],  $_POST['NhaCungCap'])) {
     $TenLinhKien = $_POST['TenLinhKien'];
     $GiaThanh = $_POST['GiaThanh'];
     $SoLuong = $_POST['SoLuong'];
     $DonViTinh = $_POST['DonViTinh'];
     $MoTa = $_POST['MoTa'];
-    $Kho = $_POST['Kho'];
+    
     $NhaCungCap = $_POST['NhaCungCap'];
 
     // Chuẩn bị truy vấn SQL
-    $sql = "INSERT INTO linhkiensuachua (TenLinhKien, GiaThanh, SoLuong, DonViTinh, MoTa, Kho, NhaCungCap) VALUES (:TenLinhKien, :GiaThanh, :SoLuong, :DonViTinh, :MoTa, :Kho, :NhaCungCap)";
+    $sql = "INSERT INTO linhkiensuachua (TenLinhKien, GiaThanh, SoLuong, DonViTinh, MoTa, NhaCungCap) VALUES (:TenLinhKien, :GiaThanh, :SoLuong, :DonViTinh, :MoTa,  :NhaCungCap)";
                 
 
     $stmt = $conn->prepare($sql);
@@ -24,7 +24,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['submit'])) {
     $stmt->bindParam(':GiaThanh', $GiaThanh, PDO::PARAM_INT);
     $stmt->bindParam(':SoLuong', $SoLuong, PDO::PARAM_INT);
     $stmt->bindParam(':DonViTinh', $DonViTinh);
-    $stmt->bindParam(':Kho', $Kho);
+
     $stmt->bindParam(':MoTa', $MoTa);
     $stmt->bindParam(':NhaCungCap', $NhaCungCap);
     try {
@@ -260,10 +260,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['submit'])) {
                         <input type="text" class="form-control" id="NhaCungCap" name="NhaCungCap" required>
                       </div>
 
-                      <div class="form-group">
-                        <label for="Kho">Kho</label>
-                        <input type="text" class="form-control" id="Kho" name="Kho" required>
-                      </div>
+                      
                       <div class="form-group">
                         <label for="DonViTinh">Đơn Vị Tính</label>
                         <select class="form-control input-square" id="DonViTinh" name="DonViTinh" required>

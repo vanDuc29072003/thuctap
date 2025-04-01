@@ -12,7 +12,11 @@ if (!isset($_GET['MaLinhKien'])) {
 $MaLinhKien = $_GET['MaLinhKien'];
 
 // 2. Lấy dữ liệu cũ của máy từ bảng `may`
-$sql = "SELECT * FROM linhkiensuachua WHERE MaLinhKien = :MaLinhKien LIMIT 1";
+$sql = "
+    SELECT lk.*, dvt.TenDonViTinh, ncc.TenNhaCungCap
+    FROM linhkiensuachua lk
+    LEFT JOIN donvitinh dvt ON lk.MaDonViTinh = dvt.MaDonViTinh
+    LEFT JOIN nhacungcap ncc ON lk.MaNhaCungCap = ncc.MaNhaCungCap  WHERE MaLinhKien = :MaLinhKien LIMIT 1";
 $stmt = $conn->prepare($sql);
 $stmt->execute(['MaLinhKien' => $MaLinhKien]);
 $linhkien = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -31,9 +35,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update'])) {
   $TenLinhKien = $_POST['TenLinhKien'];
   $GiaThanh = $_POST['GiaThanh'];
     $SoLuong = $_POST['SoLuong'];
-    $DonViTinh = $_POST['DonViTinh'];
+    $TenDonViTinh = $_POST['TenDonViTinh'];
     $Kho = $_POST['Kho'];
-    $NhaCungCap = $_POST['NhaCungCap'];
+    $TenNhaCungCap = $_POST['TenNhaCungCap'];
     $MoTa = $_POST['MoTa'];
 
   // 4. Thực hiện UPDATE
@@ -41,9 +45,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update'])) {
                   SET TenLinhKien = :TenLinhKien, 
                       GiaThanh = :GiaThanh,
                       SoLuong = :SoLuong, 
-                      DonViTinh = :DonViTinh, 
+                      TenDonViTinh = :TenDonViTinh, 
                       Kho = :Kho, 
-                      NhaCungCap = :NhaCungCap,
+                      TenNhaCungCap = :TenNhaCungCap,
                       MoTa = :MoTa
                   WHERE MaLinhKien = :MaLinhKien";
   $stmtUpdate = $conn->prepare($sqlUpdate);
@@ -51,9 +55,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update'])) {
   $stmtUpdate->bindParam(':TenLinhKien', $TenLinhKien);
   $stmtUpdate->bindParam(':GiaThanh', $GiaThanh, PDO::PARAM_INT);
   $stmtUpdate->bindParam(':SoLuong', $SoLuong, PDO::PARAM_INT);
-  $stmtUpdate->bindParam(':DonViTinh', $DonViTinh);
+  $stmtUpdate->bindParam(':TenDonViTinh', $TenDonViTinh);
   $stmtUpdate->bindParam(':Kho', $Kho);
-  $stmtUpdate->bindParam(':NhaCungCap', $NhaCungCap);
+  $stmtUpdate->bindParam(':TenTenNhaCungCap', $TenTenNhaCungCap);
   $stmtUpdate->bindParam(':MoTa', $MoTa);
   $stmtUpdate->bindParam(':MaLinhKien', $MaLinhKien, PDO::PARAM_INT);
 
@@ -288,19 +292,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update'])) {
                         value="<?php echo htmlspecialchars($linhkien['TenLinhKien']); ?>" readonly>
                     </div>
                     <div class="form-group">
-                      <label for="NhaCungCap">Nhà Cung Cấp</label>
-                      <input type="text" class="form-control" id="NhaCungCap" name="NhaCungCap"
-                        value="<?php echo htmlspecialchars($linhkien['NhaCungCap']); ?>" readonly>
+                      <label for="TenNhaCungCap">Nhà Cung Cấp</label>
+                      <input type="text" class="form-control" id="TenNhaCungCap" name="TenNhaCungCap"
+                        value="<?php echo htmlspecialchars($linhkien['TenNhaCungCap']); ?>" readonly>
                     </div>
                     <div class="form-group">
-                      <label for="Kho">Kho</label>
-                      <input type="text" class="form-control" id="Kho" name="Kho"
-                        value="<?php echo htmlspecialchars($linhkien['Kho']); ?>" readonly>
-                    </div>
-                    <div class="form-group">
-                      <label for="DonViTinh">Đơn Vị Tính</label>
-                      <input type="text" class="form-control" id="DonViTinh" name="DonViTinh"
-                        value="<?php echo htmlspecialchars($linhkien['DonViTinh']); ?>" readonly>
+                      <label for="TenDonViTinh">Đơn Vị Tính</label>
+                      <input type="text" class="form-control" id="TenDonViTinh" name="TenDonViTinh"
+                        value="<?php echo htmlspecialchars($linhkien['TenDonViTinh']); ?>" readonly>
                     </div>
                   </div>
 
