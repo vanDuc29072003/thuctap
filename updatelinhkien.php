@@ -36,30 +36,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update'])) {
   $GiaThanh = $_POST['GiaThanh'];
     $SoLuong = $_POST['SoLuong'];
     $TenDonViTinh = $_POST['TenDonViTinh'];
-    $Kho = $_POST['Kho'];
+
     $TenNhaCungCap = $_POST['TenNhaCungCap'];
     $MoTa = $_POST['MoTa'];
 
   // 4. Thực hiện UPDATE
-  $sqlUpdate = "UPDATE linhkiensuachua 
-                  SET TenLinhKien = :TenLinhKien, 
-                      GiaThanh = :GiaThanh,
-                      SoLuong = :SoLuong, 
-                      TenDonViTinh = :TenDonViTinh, 
-                      Kho = :Kho, 
-                      TenNhaCungCap = :TenNhaCungCap,
-                      MoTa = :MoTa
-                  WHERE MaLinhKien = :MaLinhKien";
-  $stmtUpdate = $conn->prepare($sqlUpdate);
 
-  $stmtUpdate->bindParam(':TenLinhKien', $TenLinhKien);
-  $stmtUpdate->bindParam(':GiaThanh', $GiaThanh, PDO::PARAM_INT);
-  $stmtUpdate->bindParam(':SoLuong', $SoLuong, PDO::PARAM_INT);
-  $stmtUpdate->bindParam(':TenDonViTinh', $TenDonViTinh);
-  $stmtUpdate->bindParam(':Kho', $Kho);
-  $stmtUpdate->bindParam(':TenTenNhaCungCap', $TenTenNhaCungCap);
-  $stmtUpdate->bindParam(':MoTa', $MoTa);
-  $stmtUpdate->bindParam(':MaLinhKien', $MaLinhKien, PDO::PARAM_INT);
+  $sqlUpdate = "UPDATE linhkiensuachua 
+  SET TenLinhKien = :TenLinhKien, 
+      GiaThanh = :GiaThanh,
+      SoLuong = :SoLuong, 
+      MoTa = :MoTa
+  WHERE MaLinhKien = :MaLinhKien";
+$stmtUpdate = $conn->prepare($sqlUpdate);
+
+$stmtUpdate->bindParam(':TenLinhKien', $TenLinhKien);
+$stmtUpdate->bindParam(':GiaThanh', $GiaThanh, PDO::PARAM_INT);
+$stmtUpdate->bindParam(':SoLuong', $SoLuong, PDO::PARAM_INT);
+$stmtUpdate->bindParam(':MoTa', $MoTa);
+$stmtUpdate->bindParam(':MaLinhKien', $MaLinhKien, PDO::PARAM_INT);
 
   if ($stmtUpdate->execute()) {
 
