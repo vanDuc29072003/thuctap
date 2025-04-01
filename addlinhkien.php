@@ -5,28 +5,37 @@ if (!isset($_SESSION['TenNhanVien'])) {
 }
 include 'connect.php';
 $error1 = "";
+
+$sql = "SELECT * FROM donvitinh";
+$stmt = $conn->prepare($sql);
+$stmt->execute();
+$donvitinhs = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+$sql = "SELECT * FROM nhacungcap";
+$stmt = $conn->prepare($sql);
+$stmt->execute();
+$nhacungcaps = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
 if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['submit'])) {
-  if (isset($_POST['TenLinhKien'], $_POST['GiaThanh'], $_POST['SoLuong'], $_POST['DonViTinh'], $_POST['MoTa'], $_POST['Kho'], $_POST['NhaCungCap'])) {
+  if (isset($_POST['TenLinhKien'], $_POST['GiaThanh'], $_POST['SoLuong'], $_POST['MaDonViTinh'], $_POST['MoTa'], $_POST['MaNhaCungCap'])) {
     $TenLinhKien = $_POST['TenLinhKien'];
     $GiaThanh = $_POST['GiaThanh'];
     $SoLuong = $_POST['SoLuong'];
-    $DonViTinh = $_POST['DonViTinh'];
+    $MaDonViTinh = $_POST['MaDonViTinh'];
     $MoTa = $_POST['MoTa'];
-    $Kho = $_POST['Kho'];
-    $NhaCungCap = $_POST['NhaCungCap'];
+    $MaNhaCungCap = $_POST['MaNhaCungCap'];
 
     // Chuẩn bị truy vấn SQL
-    $sql = "INSERT INTO linhkiensuachua (TenLinhKien, GiaThanh, SoLuong, DonViTinh, MoTa, Kho, NhaCungCap) VALUES (:TenLinhKien, :GiaThanh, :SoLuong, :DonViTinh, :MoTa, :Kho, :NhaCungCap)";
-                
+    $sql = "INSERT INTO linhkiensuachua (TenLinhKien, GiaThanh, SoLuong, MaDonViTinh, MoTa, MaNhaCungCap) 
+        VALUES (:TenLinhKien, :GiaThanh, :SoLuong, :MaDonViTinh, :MoTa, :MaNhaCungCap)";
 
     $stmt = $conn->prepare($sql);
     $stmt->bindParam(':TenLinhKien', $TenLinhKien);
     $stmt->bindParam(':GiaThanh', $GiaThanh, PDO::PARAM_INT);
     $stmt->bindParam(':SoLuong', $SoLuong, PDO::PARAM_INT);
-    $stmt->bindParam(':DonViTinh', $DonViTinh);
-    $stmt->bindParam(':Kho', $Kho);
+    $stmt->bindParam(':MaDonViTinh', $MaDonViTinh);
     $stmt->bindParam(':MoTa', $MoTa);
-    $stmt->bindParam(':NhaCungCap', $NhaCungCap);
+    $stmt->bindParam(':MaNhaCungCap', $MaNhaCungCap);
     try {
       if ($stmt->execute()) {
         $error1 = "Thêm linh kiện mới thành công";
@@ -256,39 +265,43 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['submit'])) {
                       </div>
 
                       <div class="form-group">
-                        <label for="NhaCungCap">Nhà Cung Cấp</label>
-                        <input type="text" class="form-control" id="NhaCungCap" name="NhaCungCap" required>
+                        <label for="MaDonViTinh">Đơn Vị Tính</label>
+                        <select class="form-control input-square" id="MaDonViTinh" name="MaDonViTinh" required>
+                          <?php foreach ($donvitinhs as $donvitinh): ?>
+                            <option value="<?php echo $donvitinh['MaDonViTinh']; ?>">
+                              <?php echo $donvitinh['TenDonViTinh']; ?>
+                            </option>
+                          <?php endforeach; ?>
+                        </select>
                       </div>
 
                       <div class="form-group">
-                        <label for="Kho">Kho</label>
-                        <input type="text" class="form-control" id="Kho" name="Kho" required>
-                      </div>
-                      <div class="form-group">
-                        <label for="DonViTinh">Đơn Vị Tính</label>
-                        <select class="form-control input-square" id="DonViTinh" name="DonViTinh" required>
-                          <option>Cái</option>
-                          <option>Bộ</option>
-                          <option>Tấm</option>
-                        </select>
+                        <label for="SoLuong">Số Lượng</label>
+                        <div class="input-group">
+                          <input type="number" class="form-control" id="SoLuong" name="SoLuong" required>
+                        </div>
                       </div>
 
                     </div>
 
                     <!-- Cột 2 -->
                     <div class="col-md-6">
-
                       <div class="form-group">
                         <label for="GiaThanh">Giá Thành</label>
                         <input type="number" class="form-control" id="GiaThanh" name="GiaThanh" required>
                       </div>
 
                       <div class="form-group">
-                        <label for="SoLuong">Số Lượng</label>
-                        <div class="input-group mb-3">
-                          <input type="number" class="form-control" id="SoLuong" name="SoLuong" required>
-                        </div>
+                        <label for="MaNhaCungCap">Nhà Cung Cấp</label>
+                        <select class="form-control input-square" id="MaNhaCungCap" name="MaNhaCungCap" required>
+                          <?php foreach ($nhacungcaps as $nhacungcap): ?>
+                            <option value="<?php echo $nhacungcap['MaNhaCungCap']; ?>">
+                              <?php echo $nhacungcap['TenNhaCungCap']; ?>
+                            </option>
+                          <?php endforeach; ?>
+                        </select>
                       </div>
+
                       <div class="form-group">
                         <label for="MoTa">Mô Tả</label>
                         <textarea class="form-control" id="MoTa" name="MoTa" aria-label="With textarea"></textarea>
@@ -349,13 +362,13 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['submit'])) {
   <script src="assets/js/kaiadmin.min.js"></script>
 
   <script>
-      document.getElementById('btn-logout').addEventListener('click', function(event) {
-          event.preventDefault();
-          var logout = confirm("Bạn có chắc chắn muốn đăng xuất?");
-          if (logout) {
-              window.location.href = 'logout.php';
-          }
-      });
+    document.getElementById('btn-logout').addEventListener('click', function (event) {
+      event.preventDefault();
+      var logout = confirm("Bạn có chắc chắn muốn đăng xuất?");
+      if (logout) {
+        window.location.href = 'logout.php';
+      }
+    });
   </script>
 </body>
 
