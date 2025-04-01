@@ -221,7 +221,7 @@ if (empty($_POST['submit'])) {
                   </button>
               </div>
               <div class="table-responsive">
-                <table id="basic-datatables" class="display table table-hover border border-2" cellspacing="0" width="100%">
+                <table class="table table-hover">
                   <thead>
                     <tr>
                       <th>Mã Linh Kiện</th>
@@ -325,9 +325,6 @@ if (empty($_POST['submit'])) {
         window.location.href = 'logout.php';
       }
     });
-  </script>
-  <script>
-    $('#basic-datatables').DataTable();
   </script>
 </body>
 
