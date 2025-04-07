@@ -17,34 +17,34 @@ $stmt->execute();
 $nhacungcaps = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['submit'])) {
-  if (isset($_POST['TenLinhKien'], $_POST['GiaThanh'], $_POST['SoLuong'], $_POST['MaDonViTinh'], $_POST['MoTa'], $_POST['MaNhaCungCap'])) {
-    $TenLinhKien = $_POST['TenLinhKien'];
-    $GiaThanh = $_POST['GiaThanh'];
-    $SoLuong = $_POST['SoLuong'];
-    $MaDonViTinh = $_POST['MaDonViTinh'];
-    $MoTa = $_POST['MoTa'];
-    $MaNhaCungCap = $_POST['MaNhaCungCap'];
+  if (isset($_POST['TenLinhKien'], $_POST['MoTa'], $_POST['GiaThanh'], $_POST['SoLuong'], $_POST['MaDonViTinh'], $_POST['MaNhaCungCap'])) {
+      $TenLinhKien = $_POST['TenLinhKien'];
+      $MoTa = $_POST['MoTa'];
+      $GiaThanh = $_POST['GiaThanh'];
+      $SoLuong = $_POST['SoLuong'];
+      $MaDonViTinh = $_POST['MaDonViTinh'];
+      $MaNhaCungCap = $_POST['MaNhaCungCap'];
 
-    // Chuẩn bị truy vấn SQL
-    $sql = "INSERT INTO linhkiensuachua (TenLinhKien, GiaThanh, SoLuong, MaDonViTinh, MoTa, MaNhaCungCap) 
-        VALUES (:TenLinhKien, :GiaThanh, :SoLuong, :MaDonViTinh, :MoTa, :MaNhaCungCap)";
+      $sql = "INSERT INTO linhkiensuachua (TenLinhKien, MoTa, GiaThanh, SoLuong, MaDonViTinh, MaNhaCungCap) 
+              VALUES (:TenLinhKien, :MoTa, :GiaThanh, :SoLuong, :MaDonViTinh, :MaNhaCungCap)";
+      $stmt = $conn->prepare($sql);
+      $stmt->bindParam(':TenLinhKien', $TenLinhKien);
+      $stmt->bindParam(':MoTa', $MoTa);
+      $stmt->bindParam(':GiaThanh', $GiaThanh, PDO::PARAM_INT);
+      $stmt->bindParam(':SoLuong', $SoLuong, PDO::PARAM_INT);
+      $stmt->bindParam(':MaDonViTinh', $MaDonViTinh);
+      $stmt->bindParam(':MaNhaCungCap', $MaNhaCungCap);
 
-    $stmt = $conn->prepare($sql);
-    $stmt->bindParam(':TenLinhKien', $TenLinhKien);
-    $stmt->bindParam(':GiaThanh', $GiaThanh, PDO::PARAM_INT);
-    $stmt->bindParam(':SoLuong', $SoLuong, PDO::PARAM_INT);
-    $stmt->bindParam(':MaDonViTinh', $MaDonViTinh);
-    $stmt->bindParam(':MoTa', $MoTa);
-    $stmt->bindParam(':MaNhaCungCap', $MaNhaCungCap);
-    try {
-      if ($stmt->execute()) {
-        $error1 = "Thêm linh kiện mới thành công";
+      try {
+          if ($stmt->execute()) {
+              $error1 = "Thêm linh kiện mới thành công";
+          }
+      } catch (Exception $e) {
+          echo "Lỗi: " . $e->getMessage();
+          exit();
       }
-    } catch (Exception $e) {
-
     }
   }
-}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -258,42 +258,14 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['submit'])) {
                 <form method="POST">
                   <div class="row">
                     <!-- Cột 1 -->
-                    <div class="col-md-6">
+                    <div class="col-md-4">
                       <div class="form-group">
                         <label for="TenLinhKien">Tên Linh Kiện</label>
                         <input type="text" class="form-control" id="TenLinhKien" name="TenLinhKien" required>
                       </div>
-
-                      <div class="form-group">
-                        <label for="MaDonViTinh">Đơn Vị Tính</label>
-                        <select class="form-control input-square" id="MaDonViTinh" name="MaDonViTinh" required>
-                          <?php foreach ($donvitinhs as $donvitinh): ?>
-                            <option value="<?php echo $donvitinh['MaDonViTinh']; ?>">
-                              <?php echo $donvitinh['TenDonViTinh']; ?>
-                            </option>
-                          <?php endforeach; ?>
-                        </select>
-                      </div>
-
-                      <div class="form-group">
-                        <label for="SoLuong">Số Lượng</label>
-                        <div class="input-group">
-                          <input type="number" class="form-control" id="SoLuong" name="SoLuong" required>
-                        </div>
-                      </div>
-
-                    </div>
-
-                    <!-- Cột 2 -->
-                    <div class="col-md-6">
-                      <div class="form-group">
-                        <label for="GiaThanh">Giá Thành</label>
-                        <input type="number" class="form-control" id="GiaThanh" name="GiaThanh" required>
-                      </div>
-
                       <div class="form-group">
                         <label for="MaNhaCungCap">Nhà Cung Cấp</label>
-                        <select class="form-control input-square" id="MaNhaCungCap" name="MaNhaCungCap" required>
+                        <select class="form-control" id="MaNhaCungCap" name="MaNhaCungCap" required>
                           <?php foreach ($nhacungcaps as $nhacungcap): ?>
                             <option value="<?php echo $nhacungcap['MaNhaCungCap']; ?>">
                               <?php echo $nhacungcap['TenNhaCungCap']; ?>
@@ -301,10 +273,36 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['submit'])) {
                           <?php endforeach; ?>
                         </select>
                       </div>
-
+                    </div>
+                    <!-- Cột 2 -->
+                    <div class="col-md-4">
+                      <div class="form-group">
+                        <label for="SoLuong">Số Lượng</label>
+                        <input type="number" class="form-control" id="SoLuong" name="SoLuong" required>
+                      </div>
+                      <div class="form-group">
+                        <label for="MaDonViTinh">Đơn Vị Tính</label>
+                        <select class="form-control" id="MaDonViTinh" name="MaDonViTinh" required>
+                          <?php foreach ($donvitinhs as $donvitinh): ?>
+                            <option value="<?php echo $donvitinh['MaDonViTinh']; ?>">
+                              <?php echo $donvitinh['TenDonViTinh']; ?>
+                            </option>
+                          <?php endforeach; ?>
+                        </select>
+                      </div>
+                    </div>
+                    <!-- Cột 3 -->
+                    <div class="col-md-4">
+                      <div class="form-group">
+                        <label for="GiaThanh">Giá Thành</label>
+                        <div class="input-group">
+                          <input type="number" class="form-control" id="GiaThanh" name="GiaThanh" required>
+                          <span class="input-group-text">VNĐ</span>
+                        </div>
+                      </div>
                       <div class="form-group">
                         <label for="MoTa">Mô Tả</label>
-                        <textarea class="form-control" id="MoTa" name="MoTa" aria-label="With textarea"></textarea>
+                        <textarea class="form-control" id="MoTa" name="MoTa" rows="3" required></textarea>
                       </div>
                     </div>
                     <div class="form-group mt-4">
@@ -313,7 +311,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['submit'])) {
                       </button>
                       <a href="linhkien.php" class="btn btn-secondary">Trở lại</a>
                     </div>
-                  </div> <!-- End Row -->
+                  </div>
                 </form>
               </div>
             </div>

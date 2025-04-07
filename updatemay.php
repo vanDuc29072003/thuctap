@@ -31,33 +31,52 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update'])) {
   $TenMay = $_POST['TenMay'];
   $SeriMay = $_POST['SeriMay'];
   $ChuKyBaoTri = $_POST['ChuKyBaoTri'];
+  $ThoiGianKhauHao = $_POST['ThoiGianKhauHao'];
+  $GiaTriBanDau = $_POST['GiaTriBanDau'];
+  $ThoiGianBaoHanh = $_POST['ThoiGianBaoHanh'];
+  $ThoiGianDuaVaoSuDung = $_POST['ThoiGianDuaVaoSuDung'];
   $NamSanXuat = $_POST['NamSanXuat'];
   $HangSanXuat = $_POST['HangSanXuat'];
+  $ChiTietLinhKien = $_POST['ChiTietLinhKien'];
+  $MaNhaCungCap = $_POST['MaNhaCungCap'];
 
-  // 4. Thực hiện UPDATE
+  // Thực hiện UPDATE
   $sqlUpdate = "UPDATE may 
-                  SET TenMay = :TenMay, 
-                      SeriMay = :SeriMay, 
-                      ChuKyBaoTri = :ChuKyBaoTri, 
-                      NamSanXuat = :NamSanXuat, 
-                      HangSanXuat = :HangSanXuat
-                  WHERE MaMay = :MaMay";
+                SET TenMay = :TenMay, 
+                    SeriMay = :SeriMay, 
+                    ChuKyBaoTri = :ChuKyBaoTri, 
+                    ThoiGianKhauHao = :ThoiGianKhauHao, 
+                    GiaTriBanDau = :GiaTriBanDau, 
+                    ThoiGianBaoHanh = :ThoiGianBaoHanh, 
+                    ThoiGianDuaVaoSuDung = :ThoiGianDuaVaoSuDung, 
+                    NamSanXuat = :NamSanXuat, 
+                    HangSanXuat = :HangSanXuat, 
+                    ChiTietLinhKien = :ChiTietLinhKien, 
+                    MaNhaCungCap = :MaNhaCungCap
+                WHERE MaMay = :MaMay";
+
   $stmtUpdate = $conn->prepare($sqlUpdate);
 
+  // Gán giá trị cho các tham số
   $stmtUpdate->bindParam(':TenMay', $TenMay);
   $stmtUpdate->bindParam(':SeriMay', $SeriMay);
   $stmtUpdate->bindParam(':ChuKyBaoTri', $ChuKyBaoTri, PDO::PARAM_INT);
+  $stmtUpdate->bindParam(':ThoiGianKhauHao', $ThoiGianKhauHao, PDO::PARAM_INT);
+  $stmtUpdate->bindParam(':GiaTriBanDau', $GiaTriBanDau, PDO::PARAM_STR);
+  $stmtUpdate->bindParam(':ThoiGianBaoHanh', $ThoiGianBaoHanh, PDO::PARAM_INT);
+  $stmtUpdate->bindParam(':ThoiGianDuaVaoSuDung', $ThoiGianDuaVaoSuDung);
   $stmtUpdate->bindParam(':NamSanXuat', $NamSanXuat, PDO::PARAM_INT);
   $stmtUpdate->bindParam(':HangSanXuat', $HangSanXuat);
+  $stmtUpdate->bindParam(':ChiTietLinhKien', $ChiTietLinhKien);
+  $stmtUpdate->bindParam(':MaNhaCungCap', $MaNhaCungCap, PDO::PARAM_INT);
   $stmtUpdate->bindParam(':MaMay', $MaMay, PDO::PARAM_INT);
 
-  if ($stmtUpdate->execute()) {
-
+  try {
+    $stmtUpdate->execute();
     header("Location: updatemay.php?MaMay=$MaMay&success=1");
-
-    exit();
-  } else {
-
+    exit;
+  } catch (PDOException $e) {
+    echo "Lỗi: " . $e->getMessage();
   }
 }
 ?>
@@ -272,53 +291,112 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update'])) {
               </div>
             </div>
             <div class="card-body">
-              <form method="POST">
+               <form method="POST">
                 <div class="row">
                   <!-- Cột 1 -->
-                  <div class="col-md-6">
+                  <div class="col-md-4">
                     <div class="form-group">
                       <label for="TenMay">Tên Máy</label>
                       <input type="text" class="form-control" id="TenMay" name="TenMay"
-                        value="<?php echo htmlspecialchars($may['TenMay']); ?>" readonly>
+                        value="<?php echo htmlspecialchars($may['TenMay']); ?>" required>
                     </div>
 
                     <div class="form-group">
                       <label for="SeriMay">Seri Máy</label>
                       <input type="text" class="form-control" id="SeriMay" name="SeriMay"
-                        value="<?php echo htmlspecialchars($may['SeriMay']); ?>" readonly>
+                        value="<?php echo htmlspecialchars($may['SeriMay']); ?>" required>
                     </div>
 
                     <div class="form-group">
                       <label for="ChuKyBaoTri">Chu Kỳ Bảo Trì</label>
-                      <div class="input-group mb-3">
+                      <div class="input-group">
                         <input type="number" class="form-control" id="ChuKyBaoTri" name="ChuKyBaoTri"
                           value="<?php echo htmlspecialchars($may['ChuKyBaoTri']); ?>" required>
                         <span class="input-group-text">Tháng</span>
                       </div>
                     </div>
+
+                    <div class="form-group">
+                      <label for="ThoiGianKhauHao">Thời Gian Khấu Hao</label>
+                      <div class="input-group">
+                        <input type="number" class="form-control" id="ThoiGianKhauHao" name="ThoiGianKhauHao"
+                          value="<?php echo htmlspecialchars($may['ThoiGianKhauHao']); ?>" required>
+                        <span class="input-group-text">Năm</span>
+                      </div>
+                    </div>
                   </div>
 
                   <!-- Cột 2 -->
-                  <div class="col-md-6">
+                  <div class="col-md-4">
+                    <div class="form-group">
+                      <label for="GiaTriBanDau">Giá Trị Ban Đầu</label>
+                      <div class="input-group">
+                        <input type="number" class="form-control" id="GiaTriBanDau" name="GiaTriBanDau"
+                          value="<?php echo htmlspecialchars($may['GiaTriBanDau']); ?>" required>
+                        <span class="input-group-text">VNĐ</span>
+                      </div>
+                    </div>
+
+                    <div class="form-group">
+                      <label for="ThoiGianBaoHanh">Thời Gian Bảo Hành</label>
+                      <div class="input-group">
+                        <input type="number" class="form-control" id="ThoiGianBaoHanh" name="ThoiGianBaoHanh"
+                          value="<?php echo htmlspecialchars($may['ThoiGianBaoHanh']); ?>" required>
+                        <span class="input-group-text">Tháng</span>
+                      </div>
+                    </div>
+
+                    <div class="form-group">
+                      <label for="ThoiGianDuaVaoSuDung">Thời Gian Đưa Vào Sử Dụng</label>
+                      <input type="date" class="form-control" id="ThoiGianDuaVaoSuDung" name="ThoiGianDuaVaoSuDung"
+                        value="<?php echo htmlspecialchars($may['ThoiGianDuaVaoSuDung']); ?>" required>
+                    </div>
+
                     <div class="form-group">
                       <label for="NamSanXuat">Năm Sản Xuất</label>
                       <input type="number" class="form-control" id="NamSanXuat" name="NamSanXuat"
-                        value="<?php echo htmlspecialchars($may['NamSanXuat']); ?>" readonly>
+                        value="<?php echo htmlspecialchars($may['NamSanXuat']); ?>" required>
                     </div>
+                  </div>
 
+                  <!-- Cột 3 -->
+                  <div class="col-md-4">
                     <div class="form-group">
                       <label for="HangSanXuat">Hãng Sản Xuất</label>
                       <input type="text" class="form-control" id="HangSanXuat" name="HangSanXuat"
-                        value="<?php echo htmlspecialchars($may['HangSanXuat']); ?>" readonly>
+                        value="<?php echo htmlspecialchars($may['HangSanXuat']); ?>" required>
+                    </div>
+
+                    <div class="form-group">
+                      <label for="ChiTietLinhKien">Chi Tiết Linh Kiện</label>
+                      <textarea class="form-control" id="ChiTietLinhKien" name="ChiTietLinhKien" rows="3" required><?php echo htmlspecialchars($may['ChiTietLinhKien']); ?></textarea>
+                    </div>
+
+                    <div class="form-group">
+                      <label for="MaNhaCungCap">Nhà Cung Cấp</label>
+                      <select class="form-control" id="MaNhaCungCap" name="MaNhaCungCap" required>
+                        <?php
+                        $sqlNhaCungCap = "SELECT * FROM nhacungcap";
+                        $stmtNhaCungCap = $conn->prepare($sqlNhaCungCap);
+                        $stmtNhaCungCap->execute();
+                        $nhacungcaps = $stmtNhaCungCap->fetchAll(PDO::FETCH_ASSOC);
+
+                        foreach ($nhacungcaps as $nhacungcap): ?>
+                          <option value="<?php echo $nhacungcap['MaNhaCungCap']; ?>" 
+                            <?php echo $nhacungcap['MaNhaCungCap'] == $may['MaNhaCungCap'] ? 'selected' : ''; ?>>
+                            <?php echo $nhacungcap['TenNhaCungCap']; ?>
+                          </option>
+                        <?php endforeach; ?>
+                      </select>
                     </div>
                   </div>
+                </div>
 
-                  <div class="form-group mt-4">
-                    <button type="submit" name="update" class="btn btn-primary">
-                      <i class="fa fa-save"></i> Cập nhật
-                    </button>
-                    <a href="may.php" class="btn btn-secondary">Trở lại</a>
-                  </div>
+                <div class="form-group mt-4">
+                  <button type="submit" name="update" class="btn btn-primary">
+                    <i class="fa fa-save"></i> Cập nhật
+                  </button>
+                  <a href="may.php" class="btn btn-secondary">Trở lại</a>
                 </div>
               </form>
             </div>

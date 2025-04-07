@@ -5,7 +5,8 @@ if (!isset($_SESSION['TenNhanVien'])) {
 }
 include 'connect.php';
 if (empty($_POST['submit'])) {
-  $sql = "SELECT * FROM may";
+  $sql = "SELECT may.*, ncc.TenNhaCungCap FROM may 
+          LEFT JOIN nhacungcap ncc ON may.MaNhaCungCap = ncc.MaNhaCungCap";
   $stmt = $conn->prepare($sql);
   $query = $stmt->execute();
   $result = array();
@@ -217,27 +218,27 @@ if (empty($_POST['submit'])) {
                   </button>
               </div>
               <div class="table-responsive">
-                <table class="table table-bordered">
+                <table class="table table-bordered table-hover">
                   <thead style="background-color: pink; color: black;">
                     <tr>
                       <th>Mã máy</th>
                       <th>Tên máy</th>
                       <th>Seri máy</th>
-                      <th>Chu kì bảo trì (Tháng)</th>
-                      <th>Năm sản xuất</th>
-                      <th>Hãng sản xuất</th>
+                      <th>Thời Gian Đưa Vào Sử Dụng</th>
+                      <th>Chu Kỳ Bảo Trì</th>
+                      <th>Nhà Cung Cấp</th>
                       <th>Thao tác</th>
                     </tr>
                   </thead>
                   <tbody>
                     <?php foreach ($result as $items): ?>
                       <tr>
-                        <td><?php echo $items['MaMay'] ?></td>
-                        <td><?php echo $items['TenMay'] ?></td>
-                        <td><?php echo $items['SeriMay'] ?></td>
-                        <td><?php echo $items['ChuKyBaoTri'] ?></td>
-                        <td><?php echo $items['NamSanXuat'] ?></td>
-                        <td><?php echo $items['HangSanXuat'] ?></td>
+                        <td><?php echo htmlspecialchars($items['MaMay']); ?></td>
+                        <td><?php echo htmlspecialchars($items['TenMay']); ?></td>
+                        <td><?php echo htmlspecialchars($items['SeriMay']); ?></td>
+                        <td><?php echo htmlspecialchars($items['ThoiGianDuaVaoSuDung']); ?></td>
+                        <td><?php echo htmlspecialchars($items['ChuKyBaoTri']); ?> Tháng</td>
+                        <td><?php echo htmlspecialchars($items['TenNhaCungCap']); ?></td>
                         <td>
                           <div class="d-flex gap-2">
                             <a href="updatemay.php?MaMay=<?php echo $items['MaMay']; ?>" class="btn btn-warning btn-sm">

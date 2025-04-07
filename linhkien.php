@@ -6,7 +6,14 @@ if (!isset($_SESSION['TenNhanVien'])) {
 include 'connect.php';
 if (empty($_POST['submit'])) {
   $sql = "
-  SELECT lk.*, dvt.TenDonViTinh, ncc.TenNhaCungCap
+  SELECT 
+      lk.MaLinhKien, 
+      lk.TenLinhKien, 
+      lk.MoTa, 
+      lk.GiaThanh, 
+      lk.SoLuong, 
+      dvt.TenDonViTinh, 
+      ncc.TenNhaCungCap
   FROM linhkiensuachua lk
   LEFT JOIN donvitinh dvt ON lk.MaDonViTinh = dvt.MaDonViTinh
   LEFT JOIN nhacungcap ncc ON lk.MaNhaCungCap = ncc.MaNhaCungCap
@@ -226,10 +233,10 @@ if (empty($_POST['submit'])) {
                     <tr>
                       <th>Mã Linh Kiện</th>
                       <th>Tên Linh Kiện</th>
+                      <th>Mô Tả</th>
                       <th>Giá Thành</th>
                       <th>Số Lượng</th>
                       <th>Đơn Vị Tính</th>
-                      <th>Mô Tả</th>
                       <th>Tên Nhà Cung Cấp</th>
                       <th>Cập nhật</th>
                     </tr>
@@ -237,13 +244,13 @@ if (empty($_POST['submit'])) {
                   <tbody>
                     <?php foreach ($result as $items): ?>
                       <tr>
-                        <td><?php echo $items['MaLinhKien'] ?></td>
-                        <td><?php echo $items['TenLinhKien'] ?></td>
-                        <td><?php echo $items['GiaThanh'] ?></td>
-                        <td><?php echo $items['SoLuong'] ?></td>
-                        <td><?php echo $items['TenDonViTinh'] ?></td>
-                        <td><?php echo $items['MoTa'] ?></td>
-                        <td><?php echo $items['TenNhaCungCap'] ?></td>
+                        <td><?php echo $items['MaLinhKien']; ?></td>
+                        <td><?php echo $items['TenLinhKien']; ?></td>
+                        <td><?php echo $items['MoTa']; ?></td>
+                        <td><?php echo number_format($items['GiaThanh'], 0, ',', '.'); ?> VNĐ</td>
+                        <td><?php echo $items['SoLuong']; ?></td>
+                        <td><?php echo $items['TenDonViTinh']; ?></td>
+                        <td><?php echo $items['TenNhaCungCap']; ?></td>
                         <td>
                           <div class="d-flex gap-2">
                             <a href="updatelinhkien.php?MaLinhKien=<?php echo $items['MaLinhKien']; ?>"

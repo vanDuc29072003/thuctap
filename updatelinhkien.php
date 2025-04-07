@@ -5,18 +5,20 @@ if (!isset($_SESSION['TenNhanVien'])) {
 }
 include 'connect.php';
 
-// 1. Kiểm tra có nhận được MaMay từ URL không
 if (!isset($_GET['MaLinhKien'])) {
   die("Thiếu tham số MaLinhKien trên URL");
 }
 $MaLinhKien = $_GET['MaLinhKien'];
 
-// 2. Lấy dữ liệu cũ của máy từ bảng `may`
+// 2. Lấy dữ liệu cũ của máy từ bảng `linhkiensuachua` theo `MaLinhKien`
 $sql = "
-    SELECT lk.*, dvt.TenDonViTinh, ncc.TenNhaCungCap
-    FROM linhkiensuachua lk
-    LEFT JOIN donvitinh dvt ON lk.MaDonViTinh = dvt.MaDonViTinh
-    LEFT JOIN nhacungcap ncc ON lk.MaNhaCungCap = ncc.MaNhaCungCap  WHERE MaLinhKien = :MaLinhKien LIMIT 1";
+  SELECT 
+      lk.*, 
+      dvt.TenDonViTinh, 
+      ncc.TenNhaCungCap
+  FROM linhkiensuachua lk
+  LEFT JOIN donvitinh dvt ON lk.MaDonViTinh = dvt.MaDonViTinh
+  LEFT JOIN nhacungcap ncc ON lk.MaNhaCungCap = ncc.MaNhaCungCap  WHERE MaLinhKien = :MaLinhKien LIMIT 1";
 $stmt = $conn->prepare($sql);
 $stmt->execute(['MaLinhKien' => $MaLinhKien]);
 $linhkien = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -31,38 +33,36 @@ if (isset($_GET['success']) && $_GET['success'] == 1) {
 
 // 3. Nếu người dùng nhấn nút cập nhật (method=POST)
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update'])) {
-  // Lấy dữ liệu từ form
   $TenLinhKien = $_POST['TenLinhKien'];
+  $MoTa = $_POST['MoTa'];
   $GiaThanh = $_POST['GiaThanh'];
-    $SoLuong = $_POST['SoLuong'];
-    $TenDonViTinh = $_POST['TenDonViTinh'];
+  $SoLuong = $_POST['SoLuong'];
+  $MaDonViTinh = $_POST['MaDonViTinh'];
+  $MaNhaCungCap = $_POST['MaNhaCungCap'];
 
-    $TenNhaCungCap = $_POST['TenNhaCungCap'];
-    $MoTa = $_POST['MoTa'];
-
-  // 4. Thực hiện UPDATE
-
-  $sqlUpdate = "UPDATE linhkiensuachua 
-  SET TenLinhKien = :TenLinhKien, 
+  $sqlUpdate = "UPDATE linhkiensuachua SET
+      TenLinhKien = :TenLinhKien,
+      MoTa = :MoTa,
       GiaThanh = :GiaThanh,
-      SoLuong = :SoLuong, 
-      MoTa = :MoTa
+      SoLuong = :SoLuong,
+      MaDonViTinh = :MaDonViTinh,
+      MaNhaCungCap = :MaNhaCungCap
   WHERE MaLinhKien = :MaLinhKien";
-$stmtUpdate = $conn->prepare($sqlUpdate);
 
-$stmtUpdate->bindParam(':TenLinhKien', $TenLinhKien);
-$stmtUpdate->bindParam(':GiaThanh', $GiaThanh, PDO::PARAM_INT);
-$stmtUpdate->bindParam(':SoLuong', $SoLuong, PDO::PARAM_INT);
-$stmtUpdate->bindParam(':MoTa', $MoTa);
-$stmtUpdate->bindParam(':MaLinhKien', $MaLinhKien, PDO::PARAM_INT);
+  $stmtUpdate = $conn->prepare($sqlUpdate);
+  $stmtUpdate->bindParam(':MaLinhKien', $MaLinhKien);
+  $stmtUpdate->bindParam(':TenLinhKien', $TenLinhKien);
+  $stmtUpdate->bindParam(':MoTa', $MoTa);
+  $stmtUpdate->bindParam(':GiaThanh', $GiaThanh);
+  $stmtUpdate->bindParam(':SoLuong', $SoLuong);
+  $stmtUpdate->bindParam(':MaDonViTinh', $MaDonViTinh);
+  $stmtUpdate->bindParam(':MaNhaCungCap', $MaNhaCungCap);
 
   if ($stmtUpdate->execute()) {
-
-    header("Location: updatelinhkien.php?MaLinhKien=$MaLinhKien&success=1");
-
-    exit();
+      header("Location: updatelinhkien.php?MaLinhKien=$MaLinhKien&success=1");
+      exit();
   } else {
-
+      $error1 = "Cập nhật thất bại!";
   }
 }
 ?>
@@ -280,47 +280,72 @@ $stmtUpdate->bindParam(':MaLinhKien', $MaLinhKien, PDO::PARAM_INT);
               <form method="POST">
                 <div class="row">
                   <!-- Cột 1 -->
-                  <div class="col-md-6">
+                  <div class="col-md-4">
                     <div class="form-group">
                       <label for="TenLinhKien">Tên Linh Kiện</label>
                       <input type="text" class="form-control" id="TenLinhKien" name="TenLinhKien"
-                        value="<?php echo htmlspecialchars($linhkien['TenLinhKien']); ?>" readonly>
+                        value="<?php echo htmlspecialchars($linhkien['TenLinhKien']); ?>" required>
                     </div>
                     <div class="form-group">
-                      <label for="TenNhaCungCap">Nhà Cung Cấp</label>
-                      <input type="text" class="form-control" id="TenNhaCungCap" name="TenNhaCungCap"
-                        value="<?php echo htmlspecialchars($linhkien['TenNhaCungCap']); ?>" readonly>
-                    </div>
-                    <div class="form-group">
-                      <label for="TenDonViTinh">Đơn Vị Tính</label>
-                      <input type="text" class="form-control" id="TenDonViTinh" name="TenDonViTinh"
-                        value="<?php echo htmlspecialchars($linhkien['TenDonViTinh']); ?>" readonly>
+                      <label for="MaNhaCungCap">Nhà Cung Cấp</label>
+                      <select class="form-control" id="MaNhaCungCap" name="MaNhaCungCap" required>
+                        <?php
+                        $sqlNhaCungCap = "SELECT * FROM nhacungcap";
+                        $stmtNhaCungCap = $conn->prepare($sqlNhaCungCap);
+                        $stmtNhaCungCap->execute();
+                        $nhaCungCaps = $stmtNhaCungCap->fetchAll(PDO::FETCH_ASSOC);
+
+                        foreach ($nhaCungCaps as $nhaCungCap): ?>
+                          <option value="<?php echo $nhaCungCap['MaNhaCungCap']; ?>" 
+                            <?php echo $nhaCungCap['MaNhaCungCap'] == $linhkien['MaNhaCungCap'] ? 'selected' : ''; ?>>
+                            <?php echo $nhaCungCap['TenNhaCungCap']; ?>
+                          </option>
+                        <?php endforeach; ?>
+                      </select>
                     </div>
                   </div>
-
                   <!-- Cột 2 -->
-                  <div class="col-md-6">
-                  <div class="form-group">
-                      <label for="GiaThanh">Giá Thành</label>
-                      <div class="input-group mb-3">
-                        <input type="number" class="form-control" id="GiaThanh" name="GiaThanh"
-                          value="<?php echo htmlspecialchars($linhkien['GiaThanh']); ?>" required>
+                  <div class="col-md-4">
+                    <div class="form-group">
+                      <label for="SoLuong">Số Lượng</label>
+                      <input type="number" class="form-control" id="SoLuong" name="SoLuong"
+                        value="<?php echo htmlspecialchars($linhkien['SoLuong']); ?>" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="MaDonViTinh">Đơn Vị Tính</label>
+                        <select class="form-control" id="MaDonViTinh" name="MaDonViTinh" required>
+                          <?php
+                          // Truy vấn danh sách đơn vị tính
+                          $sqlDonViTinh = "SELECT * FROM donvitinh";
+                          $stmtDonViTinh = $conn->prepare($sqlDonViTinh);
+                          $stmtDonViTinh->execute();
+                          $donViTinhs = $stmtDonViTinh->fetchAll(PDO::FETCH_ASSOC);
+
+                          foreach ($donViTinhs as $donViTinh): ?>
+                            <option value="<?php echo $donViTinh['MaDonViTinh']; ?>" 
+                              <?php echo $donViTinh['MaDonViTinh'] == $linhkien['MaDonViTinh'] ? 'selected' : ''; ?>>
+                              <?php echo $donViTinh['TenDonViTinh']; ?>
+                            </option>
+                          <?php endforeach; ?>
+                        </select>
                       </div>
                     </div>
-                 <div class="form-group">
-                      <label for="SoLuong">Số Lượng</label>
-                      <div class="input-group mb-3">
-                        <input type="number" class="form-control" id="SoLuong" name="SoLuong"
-                          value="<?php echo htmlspecialchars($linhkien['SoLuong']); ?>" required>
+                  <!-- Cột 3 -->
+                  <div class="col-md-4">
+                    <div class="form-group">
+                      <label for="GiaThanh">Giá Thành</label>
+                      <div class="input-group">
+                        <input type="number" class="form-control" id="GiaThanh" name="GiaThanh"
+                          value="<?php echo htmlspecialchars($linhkien['GiaThanh']); ?>" required>
+                        <span class="input-group-text">VNĐ</span>
                       </div>
                     </div>
                     <div class="form-group">
                       <label for="MoTa">Mô Tả</label>
-                      <input type="text" class="form-control" id="MoTa" name="MoTa"
-                        value="<?php echo htmlspecialchars($linhkien['MoTa']); ?>" readonly>
+                      <textarea class="form-control" id="MoTa" name="MoTa" rows="3" required><?php echo htmlspecialchars($linhkien['MoTa']); ?></textarea>
                     </div>
                   </div>
-
                   <div class="form-group mt-4">
                     <button type="submit" name="update" class="btn btn-primary">
                       <i class="fa fa-save"></i> Cập nhật

@@ -6,30 +6,48 @@ if (!isset($_SESSION['TenNhanVien'])) {
 }
 include 'connect.php';
 
+$sqlNhaCungCap = "SELECT * FROM nhacungcap";
+$stmtNhaCungCap = $conn->prepare($sqlNhaCungCap);
+$stmtNhaCungCap->execute();
+$nhacungcaps = $stmtNhaCungCap->fetchAll(PDO::FETCH_ASSOC);
+
 if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['submit'])) {
-  if (isset($_POST['TenMay'], $_POST['SeriMay'], $_POST['ChuKyBaoTri'], $_POST['NamSanXuat'], $_POST['HangSanXuat'])) {
+  if (isset($_POST['TenMay'], $_POST['SeriMay'], $_POST['ChuKyBaoTri'], $_POST['ThoiGianKhauHao'], $_POST['GiaTriBanDau'], $_POST['ThoiGianBaoHanh'], $_POST['ThoiGianDuaVaoSuDung'], $_POST['NamSanXuat'], $_POST['HangSanXuat'], $_POST['ChiTietLinhKien'], $_POST['MaNhaCungCap'])) {
     $TenMay = $_POST['TenMay'];
     $SeriMay = $_POST['SeriMay'];
     $ChuKyBaoTri = $_POST['ChuKyBaoTri'];
+    $ThoiGianKhauHao = $_POST['ThoiGianKhauHao'];
+    $GiaTriBanDau = $_POST['GiaTriBanDau'];
+    $ThoiGianBaoHanh = $_POST['ThoiGianBaoHanh'];
+    $ThoiGianDuaVaoSuDung = $_POST['ThoiGianDuaVaoSuDung'];
     $NamSanXuat = $_POST['NamSanXuat'];
     $HangSanXuat = $_POST['HangSanXuat'];
+    $ChiTietLinhKien = $_POST['ChiTietLinhKien'];
+    $MaNhaCungCap = $_POST['MaNhaCungCap'];
 
     // Chuẩn bị truy vấn SQL
-    $sql = "INSERT INTO may (TenMay, SeriMay, ChuKyBaoTri, NamSanXuat, HangSanXuat) 
-                VALUES (:TenMay, :SeriMay, :ChuKyBaoTri, :NamSanXuat, :HangSanXuat)";
+    $sql = "INSERT INTO may (TenMay, SeriMay, ChuKyBaoTri, ThoiGianKhauHao, GiaTriBanDau, ThoiGianBaoHanh, ThoiGianDuaVaoSuDung, NamSanXuat, HangSanXuat, ChiTietLinhKien, MaNhaCungCap) 
+            VALUES (:TenMay, :SeriMay, :ChuKyBaoTri, :ThoiGianKhauHao, :GiaTriBanDau, :ThoiGianBaoHanh, :ThoiGianDuaVaoSuDung, :NamSanXuat, :HangSanXuat, :ChiTietLinhKien, :MaNhaCungCap)";
 
     $stmt = $conn->prepare($sql);
     $stmt->bindParam(':TenMay', $TenMay);
     $stmt->bindParam(':SeriMay', $SeriMay);
     $stmt->bindParam(':ChuKyBaoTri', $ChuKyBaoTri, PDO::PARAM_INT);
+    $stmt->bindParam(':ThoiGianKhauHao', $ThoiGianKhauHao, PDO::PARAM_INT);
+    $stmt->bindParam(':GiaTriBanDau', $GiaTriBanDau, PDO::PARAM_STR);
+    $stmt->bindParam(':ThoiGianBaoHanh', $ThoiGianBaoHanh, PDO::PARAM_INT);
+    $stmt->bindParam(':ThoiGianDuaVaoSuDung', $ThoiGianDuaVaoSuDung);
     $stmt->bindParam(':NamSanXuat', $NamSanXuat, PDO::PARAM_INT);
     $stmt->bindParam(':HangSanXuat', $HangSanXuat);
+    $stmt->bindParam(':ChiTietLinhKien', $ChiTietLinhKien);
+    $stmt->bindParam(':MaNhaCungCap', $MaNhaCungCap, PDO::PARAM_INT);
+
     try {
       if ($stmt->execute()) {
         $error1 = "Thêm máy mới thành công";
       }
     } catch (Exception $e) {
-      $error = "Thêm mới không thành công. Do trùng seri máy";
+      $error = "Thêm mới không thành công. Lỗi: " . $e->getMessage();
     }
   }
 }
@@ -254,8 +272,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['submit'])) {
               <div class="card-body">
                 <form method="POST">
                   <div class="row">
-                    <!-- Cột 1 -->
-                    <div class="col-md-6">
+                    <div class="col-md-4">
                       <div class="form-group">
                         <label for="TenMay">Tên Máy</label>
                         <input type="text" class="form-control" id="TenMay" name="TenMay" required>
@@ -267,24 +284,70 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['submit'])) {
                       </div>
 
                       <div class="form-group">
-                        <label for="ChuKyBaoTri">Chu Kỳ Bảo Trì</label>
-                        <div class="input-group mb-3">
-                          <input type="float" class="form-control" id="ChuKyBaoTri" name="ChuKyBaoTri" required>
-                          <span class="input-group-text" id="basic-addon2">Tháng</span>
-                        </div>
+                        <label for="MaNhaCungCap">Nhà Cung Cấp</label>
+                        <select class="form-control" id="MaNhaCungCap" name="MaNhaCungCap" required>
+                          <?php foreach ($nhacungcaps as $nhacungcap): ?>
+                            <option value="<?php echo $nhacungcap['MaNhaCungCap']; ?>">
+                              <?php echo $nhacungcap['TenNhaCungCap']; ?>
+                            </option>
+                          <?php endforeach; ?>
+                        </select>
+                      </div>
+
+                      <div class="form-group">
+                        <label for="HangSanXuat">Hãng Sản Xuất</label>
+                        <input type="text" class="form-control" id="HangSanXuat" name="HangSanXuat" required>
                       </div>
                     </div>
 
-                    <!-- Cột 2 -->
-                    <div class="col-md-6">
+                    <div class="col-md-4">
                       <div class="form-group">
                         <label for="NamSanXuat">Năm Sản Xuất</label>
                         <input type="number" class="form-control" id="NamSanXuat" name="NamSanXuat" required>
                       </div>
 
                       <div class="form-group">
-                        <label for="HangSanXuat">Hãng Sản Xuất</label>
-                        <input type="text" class="form-control" id="HangSanXuat" name="HangSanXuat" required>
+                        <label for="ThoiGianKhauHao">Thời Gian Khấu Hao</label>
+                        <div class="input-group">
+                          <input type="number" class="form-control" id="ThoiGianKhauHao" name="ThoiGianKhauHao" required>
+                          <span class="input-group-text">Năm</span>
+                        </div>
+                      </div>
+
+                      <div class="form-group">
+                        <label for="GiaTriBanDau">Giá Trị Ban Đầu</label>
+                        <div class="input-group">
+                          <input type="number" class="form-control" id="GiaTriBanDau" name="GiaTriBanDau" required>
+                          <span class="input-group-text">VNĐ</span>
+                        </div>
+                      </div>
+
+                      <div class="form-group">
+                        <label for="ChuKyBaoTri">Chu Kỳ Bảo Trì</label>
+                        <div class="input-group mb-3">
+                          <input type="number" class="form-control" id="ChuKyBaoTri" name="ChuKyBaoTri" required>
+                          <span class="input-group-text" id="basic-addon2">Tháng</span>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-4">
+                      <div class="form-group">
+                        <label for="ThoiGianBaoHanh">Thời Gian Bảo Hành</label>
+                        <div class="input-group">
+                          <input type="number" class="form-control" id="ThoiGianBaoHanh" name="ThoiGianBaoHanh" required>
+                          <span class="input-group-text">Tháng</span>
+                        </div>
+                      </div>
+
+                      <div class="form-group">
+                        <label for="ThoiGianDuaVaoSuDung">Thời Gian Đưa Vào Sử Dụng</label>
+                        <input type="date" class="form-control" id="ThoiGianDuaVaoSuDung" name="ThoiGianDuaVaoSuDung"
+                          required>
+                      </div>
+                      <div class="form-group">
+                        <label for="ChiTietLinhKien">Chi Tiết Linh Kiện</label>
+                        <textarea class="form-control" id="ChiTietLinhKien" name="ChiTietLinhKien" rows="3"
+                          required></textarea>
                       </div>
                     </div>
                     <div class="form-group mt-4">
