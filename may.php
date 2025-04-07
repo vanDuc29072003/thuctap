@@ -232,7 +232,7 @@ if (empty($_POST['submit'])) {
                   </thead>
                   <tbody>
                     <?php foreach ($result as $items): ?>
-                      <tr>
+                      <tr class="text-center" onclick="window.location='detailmay.php?MaMay=<?php echo $items['MaMay']; ?>'">
                         <td><?php echo htmlspecialchars($items['MaMay']); ?></td>
                         <td><?php echo htmlspecialchars($items['TenMay']); ?></td>
                         <td><?php echo htmlspecialchars($items['SeriMay']); ?></td>
@@ -250,7 +250,7 @@ if (empty($_POST['submit'])) {
 
                           </div>
                         </td>
-                      </tr>
+                      </>
                     <?php endforeach ?>
                     </tr>
                   </tbody>
