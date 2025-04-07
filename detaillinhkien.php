@@ -5,19 +5,20 @@ if (!isset($_SESSION['TenNhanVien'])) {
     exit();
 }
 include 'connect.php';
-if (!isset($_GET['MaMay'])) {
-    die("Thiếu tham số MaMay trên URL");
+if (!isset($_GET['MaLinhKien']) || empty($_GET['MaLinhKien'])) {
+    die("Mã linh kiện không hợp lệ.");
 }
-$MaMay = $_GET['MaMay'];
-$sql = "SELECT may.*, ncc.TenNhaCungCap FROM may 
-        LEFT JOIN nhacungcap ncc ON may.MaNhaCungCap = ncc.MaNhaCungCap
-        WHERE may.MaMay = :MaMay LIMIT 1
-";
+$MaLinhKien = $_GET['MaLinhKien'];
+$sql = "SELECT lk.*, dvt.TenDonViTinh, ncc.TenNhaCungCap 
+        FROM linhkiensuachua lk
+        LEFT JOIN donvitinh dvt ON lk.MaDonViTinh = dvt.MaDonViTinh
+        LEFT JOIN nhacungcap ncc ON lk.MaNhaCungCap = ncc.MaNhaCungCap
+        WHERE lk.MaLinhKien = :MaLinhKien";
 $stmt = $conn->prepare($sql);
-$stmt->execute(['MaMay' => $MaMay]);
-$may = $stmt->fetch(PDO::FETCH_ASSOC);
-if (!$may) {
-    die("Không tìm thấy máy có Mã = $MaMay");
+$stmt->execute(['MaLinhKien' => $_GET['MaLinhKien']]);
+$linhkien = $stmt->fetch(PDO::FETCH_ASSOC);
+if (!$linhkien) {
+    die("Không tìm thấy linh kiện có Mã = $MaLinhKien");
 }
 ?>
 <!DOCTYPE html>
@@ -204,7 +205,7 @@ if (!$may) {
                                 </a>
                             </li>
                             <li class="nav-item topbar-icon">
-                                <b class="ms-2">Xin chào, ABC</b>
+                                <b class="ms-2">Xin chào, <?php echo $_SESSION['TenNhanVien'] ?></b>
                             </li>
                         </ul>
                     </div>
@@ -214,51 +215,32 @@ if (!$may) {
                 <div class="page-inner">
                     <div class="card">
                         <div class="card-header">
-                            <h1 class="m-3">Thông Tin Máy</h1>
+                            <h1 class="m-3">Thông Tin Linh Kien</h1>
                         </div>
                         <div class="card-body p-5">
                             <table class="table table-bordered table-striped">
                                 <tbody>
                                     <tr>
-                                        <th scope="row">Mã Máy</th>
-                                        <td><?php echo htmlspecialchars($may['MaMay']); ?></td>
-                                        <th scope="row">Thời Gian Đưa Vào Sử Dụng</th>
-                                        <td><?php echo htmlspecialchars($may['ThoiGianDuaVaoSuDung']); ?></td>
-                                    </tr>
-                                    <tr>
-                                        <th scope="row">Tên Máy</th>
-                                        <td><?php echo htmlspecialchars($may['TenMay']); ?></td>
-                                        <th scope="row">Năm Sản Xuất</th>
-                                        <td><?php echo htmlspecialchars($may['NamSanXuat']); ?></td>
-                                    </tr>
-                                    <tr>
-                                        <th scope="row">Seri Máy</th>
-                                        <td><?php echo htmlspecialchars($may['SeriMay']); ?></td>
-                                        <th scope="row">Hãng Sản Xuất</th>
-                                        <td><?php echo htmlspecialchars($may['HangSanXuat']); ?></td>
-                                    </tr>
-                                    <tr>
-                                        <th scope="row">Chu Kỳ Bảo Trì</th>
-                                        <td><?php echo htmlspecialchars($may['ChuKyBaoTri']); ?> tháng</td>
-                                        <th scope="row">Chi Tiết Linh Kiện</th>
-                                        <td>
-                                            <a href="<?php echo htmlspecialchars($may['ChiTietLinhKien']); ?>"
-                                                target="_blank">
-                                                <i class="fas fa-link"></i> Mở file chi tiết
-                                            </a>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <th scope="row">Thời Gian Bảo Hành</th>
-                                        <td><?php echo htmlspecialchars($may['ThoiGianBaoHanh']); ?> tháng</td>
+                                        <th scope="row">Mã Linh Kiện</th>
+                                        <td><?php echo htmlspecialchars($linhkien['MaLinhKien']); ?></td>
                                         <th scope="row">Nhà Cung Cấp</th>
-                                        <td><?php echo htmlspecialchars($may['TenNhaCungCap']); ?></td>
+                                        <td><?php echo htmlspecialchars($linhkien['TenNhaCungCap']); ?></td>
                                     </tr>
                                     <tr>
-                                        <th scope="row">Giá Trị Ban Đầu</th>
-                                        <td><?php echo number_format($may['GiaTriBanDau'], 0, ',', '.') ?> VNĐ</td>
-                                        <th scope="row">Thời Gian Khấu Hao</th>
-                                        <td><?php echo htmlspecialchars($may['ThoiGianKhauHao']); ?> năm</td>
+                                        <th scope="row">Tên Linh Kiện</th>
+                                        <td><?php echo htmlspecialchars($linhkien['TenLinhKien']); ?></td>
+                                        <th scope="row">Giá Thành</th>
+                                        <td><?php echo number_format($linhkien['GiaThanh'], 0, ',', '.') ?> VNĐ</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">Số Lượng</th>
+                                        <td><?php echo htmlspecialchars($linhkien['SoLuong']); ?></td>
+                                        <th scope="row">Mô Tả</th>
+                                        <td><?php echo htmlspecialchars($linhkien['MoTa']); ?></td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">Đơn Vị Tính</th>
+                                        <td><?php echo htmlspecialchars($linhkien['TenDonViTinh']); ?></td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -269,7 +251,8 @@ if (!$may) {
                                 <a href="may.php" class="btn btn-secondary">
                                     <i class="fa fa-arrow-left"></i> Quay lại
                                 </a>
-                                <a href="updatemay.php?MaMay=<?php echo $may['MaMay']; ?>" class="btn btn-warning mx-3">
+                                <a href="updatelinhkien.php?MaLinhKien=<?php echo $linhkien['MaLinhKien']; ?>"
+                                    class="btn btn-warning mx-3">
                                     <i class="fa fa-edit"></i> Sửa
                                 </a>
                             </div>
@@ -318,4 +301,5 @@ if (!$may) {
     <!-- Kaiadmin JS -->
     <script src="assets/js/kaiadmin.min.js"></script>
 </body>
+
 </html>

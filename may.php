@@ -219,7 +219,7 @@ if (empty($_POST['submit'])) {
               </div>
               <div class="table-responsive">
                 <table class="table table-bordered table-hover">
-                  <thead style="background-color: pink; color: black;">
+                  <thead class="text-center" style="background-color: pink; color: black;">
                     <tr>
                       <th>Mã máy</th>
                       <th>Tên máy</th>

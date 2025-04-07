@@ -5,19 +5,9 @@ if (!isset($_SESSION['TenNhanVien'])) {
 }
 include 'connect.php';
 if (empty($_POST['submit'])) {
-  $sql = "
-  SELECT 
-      lk.MaLinhKien, 
-      lk.TenLinhKien, 
-      lk.MoTa, 
-      lk.GiaThanh, 
-      lk.SoLuong, 
-      dvt.TenDonViTinh, 
-      ncc.TenNhaCungCap
-  FROM linhkiensuachua lk
-  LEFT JOIN donvitinh dvt ON lk.MaDonViTinh = dvt.MaDonViTinh
-  LEFT JOIN nhacungcap ncc ON lk.MaNhaCungCap = ncc.MaNhaCungCap
-";
+  $sql = "SELECT lk.*, dvt.TenDonViTinh, ncc.TenNhaCungCap FROM linhkiensuachua lk
+          LEFT JOIN donvitinh dvt ON lk.MaDonViTinh = dvt.MaDonViTinh 
+          LEFT JOIN nhacungcap ncc ON lk.MaNhaCungCap = ncc.MaNhaCungCap";
   $stmt = $conn->prepare($sql);
   $query = $stmt->execute();
   $result = array();
@@ -230,7 +220,7 @@ if (empty($_POST['submit'])) {
               <div class="table-responsive">
                 <table class="table table-hover">
                   <thead>
-                    <tr>
+                    <tr class="text-center">
                       <th>Mã Linh Kiện</th>
                       <th>Tên Linh Kiện</th>
                       <th>Mô Tả</th>
@@ -243,7 +233,8 @@ if (empty($_POST['submit'])) {
                   </thead>
                   <tbody>
                     <?php foreach ($result as $items): ?>
-                      <tr>
+                      <tr class="text-center"
+                        onclick="window.location='detaillinhkien.php?MaLinhKien=<?php echo $items['MaLinhKien']; ?>'">
                         <td><?php echo $items['MaLinhKien']; ?></td>
                         <td><?php echo $items['TenLinhKien']; ?></td>
                         <td><?php echo $items['MoTa']; ?></td>
@@ -317,7 +308,7 @@ if (empty($_POST['submit'])) {
       buttons.forEach(button => {
         button.addEventListener("click", function () {
           let id = this.id.split("-")[1]; // Lấy ID từ delete-123
-          if (confirm("Bạn có chắc chắn muốn xóa máy này?")) {
+          if (confirm("Bạn có chắc chắn muốn xóa linh kiện này?")) {
             window.location.href = `deletelinhkien.php?id=${id}`;
           }
         });
