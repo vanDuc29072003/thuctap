@@ -264,6 +264,12 @@ if (!$may) {
                                         <th scope="row">Nhà Cung Cấp</th>
                                         <td><?php echo htmlspecialchars($may['TenNhaCungCap']); ?></td>
                                     </tr>
+                                    <tr>
+                                        <th scope="row">Giá Trị Ban Đầu</th>
+                                        <td><?php echo htmlspecialchars($may['GiaTriBanDau']); ?></td>
+                                        <th scope="row">Thời Gian Khấu Hao</th>
+                                        <td><?php echo htmlspecialchars($may['ThoiGianKhauHao']); ?> tháng</td>
+                                    </tr>
                                 </tbody>
                             </table>
                         </div>
