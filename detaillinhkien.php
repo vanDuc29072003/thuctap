@@ -215,7 +215,7 @@ if (!$linhkien) {
                 <div class="page-inner">
                     <div class="card">
                         <div class="card-header">
-                            <h1 class="m-3">Thông Tin Linh Kien</h1>
+                            <h1 class="m-3">Thông Tin Linh Kiện</h1>
                         </div>
                         <div class="card-body p-5">
                             <table class="table table-bordered table-striped">

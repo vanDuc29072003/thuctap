@@ -244,7 +244,8 @@ if (empty($_POST['submit'])) {
                             <a href="updatemay.php?MaMay=<?php echo $items['MaMay']; ?>" class="btn btn-warning btn-sm">
                               <i class="fa fa-edit"></i> Sửa
                             </a>
-                            <button class="btn btn-danger btn-sm" id="delete-<?php echo $items['MaMay']; ?>">
+                            <button class="btn btn-danger btn-sm" id="delete-<?php echo $items['MaMay']; ?>" onclick="event.stopPropagation(); confirmDelete(<?php echo $items['MaMay']; ?>)">
+
                               <i class="fa fa-trash"></i> Xóa
                             </button>
 
@@ -299,19 +300,7 @@ if (empty($_POST['submit'])) {
 
   <!-- Kaiadmin JS -->
   <script src="assets/js/kaiadmin.min.js"></script>
-  <script>
-    document.addEventListener("DOMContentLoaded", function () {
-      let buttons = document.querySelectorAll("[id^=delete-]");
-      buttons.forEach(button => {
-        button.addEventListener("click", function () {
-          let id = this.id.split("-")[1]; // Lấy ID từ delete-123
-          if (confirm("Bạn có chắc chắn muốn xóa máy này?")) {
-            window.location.href = `deletemay.php?id=${id}`;
-          }
-        });
-      });
-    });
-  </script>
+  
   <script>
     document.getElementById('btn-logout').addEventListener('click', function (event) {
       event.preventDefault();
@@ -337,6 +326,13 @@ if (empty($_POST['submit'])) {
             <?php unset($_SESSION['errorPermission']) ?>
         <?php endif; ?>
     </script>
+    <script>
+    function confirmDelete(id) {
+        if (confirm("Bạn có chắc chắn muốn xóa máy này?")) {
+            window.location.href = `deletemay.php?id=${id}`;
+        }
+    }
+</script>
 </body>
 
 </html>

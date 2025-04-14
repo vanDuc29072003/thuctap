@@ -248,7 +248,7 @@ if (empty($_POST['submit'])) {
                               class="btn btn-warning btn-sm">
                               <i class="fa fa-edit"></i> Sửa
                             </a>
-                            <button class="btn btn-danger btn-sm" id="delete-<?php echo $items['MaLinhKien']; ?>">
+                            <button class="btn btn-danger btn-sm" id="delete-<?php echo $items['MaLinhKien']; ?>" onclick="event.stopPropagation(); confirmDelete(<?php echo $items['MaLinhKien']; ?>)">
                               <i class="fa fa-trash"></i> Xóa
                             </button>
                           </div>
@@ -302,19 +302,7 @@ if (empty($_POST['submit'])) {
 
   <!-- Kaiadmin JS -->
   <script src="assets/js/kaiadmin.min.js"></script>
-  <script>
-    document.addEventListener("DOMContentLoaded", function () {
-      let buttons = document.querySelectorAll("[id^=delete-]");
-      buttons.forEach(button => {
-        button.addEventListener("click", function () {
-          let id = this.id.split("-")[1]; // Lấy ID từ delete-123
-          if (confirm("Bạn có chắc chắn muốn xóa linh kiện này?")) {
-            window.location.href = `deletelinhkien.php?id=${id}`;
-          }
-        });
-      });
-    });
-  </script>
+  
   <script>
     document.getElementById('btn-logout').addEventListener('click', function (event) {
       event.preventDefault();
@@ -323,6 +311,13 @@ if (empty($_POST['submit'])) {
         window.location.href = 'logout.php';
       }
     });
+  </script>
+  <script>
+    function confirmDelete(id) {
+      if (confirm("Bạn có chắc chắn muốn xóa linh kiện này?")) {
+        window.location.href = `deletelinhkien.php?id=${id}`;
+      }
+    }
   </script>
 </body>
 
